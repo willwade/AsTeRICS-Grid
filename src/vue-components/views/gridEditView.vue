@@ -308,7 +308,6 @@ let vueConfig = {
         },
         handleCellSelect(cellData) {
             const { x, y, event } = cellData;
-            const cellKey = `${x}-${y}`;
 
             // Check if cell is already selected
             const existingIndex = this.selectedCells.findIndex(cell => cell.x === x && cell.y === y);
@@ -328,13 +327,16 @@ let vueConfig = {
                     // Deselect if it's the only selected cell
                     this.selectedCells = [];
                 } else {
-                    // Replace selection
+                    // Replace selection with this cell
                     this.selectedCells = [{ x, y }];
                 }
             }
 
             // Update markedElementIds for compatibility with existing toolbar
             this.updateMarkedElementsFromSelection();
+
+            // Force update to ensure toolbar appears
+            this.$forceUpdate();
         },
         handleCellCreate(cellData) {
             const { x, y } = cellData;
