@@ -221,7 +221,8 @@ let vueConfig = {
             ctrlKeyHold: false,
             usingTouchscreen: false,
             propTransferObject: null,
-            selectionMode: false
+            selectionMode: false,
+            selectedCells: []
         };
     },
     components: {
