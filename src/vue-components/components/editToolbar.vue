@@ -2,9 +2,19 @@
     <div class="edit-toolbar-container">
         <!-- Primary Toolbar -->
         <header class="primary-toolbar" role="toolbar">
-            <button 
-                @click="save" 
-                class="toolbar-btn save-btn" 
+            <button
+                @click="exitEditMode"
+                class="toolbar-btn exit-edit-btn"
+                :aria-label="$t('editingOff')">
+                <i class="fas fa-eye"></i>
+                <span class="btn-text">{{ $t('editingOff') }}</span>
+            </button>
+
+            <div class="toolbar-divider"></div>
+
+            <button
+                @click="save"
+                class="toolbar-btn save-btn"
                 :aria-label="$t('save')"
                 :disabled="!canSave">
                 <i class="fas fa-check"></i>
