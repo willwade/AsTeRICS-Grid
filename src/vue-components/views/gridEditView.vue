@@ -245,7 +245,7 @@
                 this.propTransferObject = null;
                 $('#' + this.editElementId).removeClass('transfer-prop-source');
                 this.unmarkAll();
-                initContextmenu();
+                // initContextmenu(); // Disabled in favor of toolbar
             },
             moveAll: function(dir) {
                 // Convert string directions to constants
@@ -770,7 +770,7 @@
                 await dataService.saveMetadata(thiz.metadata);
             }
 
-            initContextmenu();
+            // initContextmenu(); // Disabled in favor of toolbar
             thiz.showGrid = true;
             thiz.highlightElement();
             this.$nextTick(() => {
