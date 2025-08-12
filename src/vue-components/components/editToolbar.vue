@@ -188,6 +188,15 @@ export default {
             multiSelectMode: false
         };
     },
+    computed: {
+        dropdownStyle() {
+            // Calculate position relative to the layout button
+            return {
+                transform: 'translateX(-50%)',
+                left: '50%'
+            };
+        }
+    },
     methods: {
         exitEditMode() {
             this.$emit('exit-edit-mode');
