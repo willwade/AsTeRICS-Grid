@@ -548,4 +548,19 @@ export default {
         transform: none !important;
     }
 }
+
+.button-group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    background: rgba(248, 249, 250, 0.5);
+}
+
+.button-group .toolbar-btn {
+    margin: 0;
+    border-radius: 3px;
+}
 </style>
