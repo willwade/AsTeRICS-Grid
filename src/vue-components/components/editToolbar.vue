@@ -49,6 +49,33 @@
 
         <!-- Secondary Toolbar -->
         <header class="secondary-toolbar" role="toolbar">
+            <button
+                @click="toggleSelectionMode"
+                class="toolbar-btn selection-mode-btn"
+                :class="{ 'active': selectionMode }"
+                :aria-label="$t('selectedElementsContextMenu')"
+                ref="selectButton">
+                <i class="fas fa-mouse-pointer"></i>
+                <span class="btn-text">{{ selectionMode ? $t('clear') : $t('selectedElementsContextMenu') }}</span>
+            </button>
+
+            <!-- Selection Mode Dropdown -->
+            <div
+                v-if="showSelectionOptions"
+                class="selection-dropdown"
+                ref="selectionDropdown">
+                <button @click="setSingleSelectMode" class="dropdown-item" :class="{ 'active': !multiSelectMode }">
+                    <i class="fas fa-mouse-pointer"></i>
+                    {{ $t('selectedItem') }}
+                </button>
+                <button @click="setMultiSelectMode" class="dropdown-item" :class="{ 'active': multiSelectMode }">
+                    <i class="fas fa-hand-pointer"></i>
+                    {{ $t('allSelected') }}
+                </button>
+            </div>
+
+            <div class="toolbar-divider"></div>
+
             <button @click="copyAllElements" class="toolbar-btn" :aria-label="$t('copyAllElements')">
                 <i class="fas fa-copy"></i>
                 <span class="btn-text">{{ $t('copyAllElements') }}</span>
