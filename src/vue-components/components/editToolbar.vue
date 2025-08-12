@@ -281,6 +281,7 @@ export default {
             this.$emit('toggle-selection-mode', { multiSelect: true });
         },
         handleClickOutside(event) {
+            // Handle layout dropdown
             if (
                 this.showTools &&
                 this.$refs.toolsDropdown &&
@@ -290,6 +291,18 @@ export default {
                 !this.$refs.layoutButton.contains(event.target)
             ) {
                 this.showTools = false;
+            }
+
+            // Handle selection dropdown
+            if (
+                this.showSelectionOptions &&
+                this.$refs.selectionDropdown &&
+                this.$refs.selectButton &&
+                event.target &&
+                !this.$refs.selectionDropdown.contains(event.target) &&
+                !this.$refs.selectButton.contains(event.target)
+            ) {
+                this.showSelectionOptions = false;
             }
         }
     },
