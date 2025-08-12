@@ -635,6 +635,7 @@ let vueConfig = {
         unmarkAll() {
             $('.element-container').removeClass('marked');
             this.markedElementIds = [];
+            this.selectedCells = [];
         },
         markAll() {
             $('.element-container').addClass('marked');
