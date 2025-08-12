@@ -247,6 +247,7 @@ let vueConfig = {
             propTransferObject: null,
             selectionMode: false,
             selectedCells: [],
+            multiSelectMode: false,
             AppGridElement: AppGridElement
         };
     },
