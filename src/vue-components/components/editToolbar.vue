@@ -16,7 +16,7 @@
 
             <button @click="showGridProperties" class="toolbar-btn" :aria-label="$t('gridSettings')">
                 <i class="fas fa-cog"></i>
-                <span class="btn-text">{{ $t('gridProperties') }}</span>
+                <span class="btn-text">{{ $t('gridSettings') }}</span>
             </button>
 
             <button @click="createNewGrid" class="toolbar-btn" :aria-label="$t('newGrid')">
