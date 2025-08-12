@@ -1,18 +1,39 @@
 <template>
     <div class="box">
-        <header class="srow header" role="toolbar" v-show="!propTransferObject">
+        <!-- New Toolbar Interface -->
+        <edit-toolbar
+            v-show="!propTransferObject"
+            :can-save="true"
+            :can-undo="undoService.canUndo()"
+            :can-redo="undoService.canRedo()"
+            :grid-is-full="gridIsFull"
+            :show-global-grid-button="showGlobalGridButton"
+            @save="saveGrid"
+            @show-grid-properties="showGridSettingsModal = true"
+            @create-new-grid="createNewGrid"
+            @show-search="showSearch"
+            @undo="undo"
+            @redo="redo"
+            @copy-all-elements="copyAllElements"
+            @create-new-element="() => newElement(GridElement.ELEMENT_TYPE_NORMAL)"
+            @create-many-elements="newElements"
+            @edit-global-grid="editGlobalGrid"
+            @move-all="moveAll"
+            @normalize-layout="normalizeGrid"
+            @fill-with-empty="fillElements"
+            @translate-grid="showTranslateModal = true"
+            @clear-all-elements="clearElements"
+        />
+
+        <!-- Legacy header for property transfer mode -->
+        <header class="srow header legacy-header" role="toolbar" v-show="!propTransferObject" style="display: none;">
             <header-icon class="left"></header-icon>
             <button tabindex="30" @click="back" :aria-label="$t('editingOff')" class="spaced small left">
                 <i class="fas fa-eye"></i>
                 <span class="hide-mobile">{{ $t('editingOff') }}</span>
             </button>
-            <button tabindex="33" id="moreButton" :aria-label="$t('more')" class="spaced"><i class="fas fa-ellipsis-v"></i> <span class="hide-mobile">{{ $t('more') }}</span></button>
-            <div id="moreButtonMenu"></div>
-            <div class="spaced btn-group">
-                <button tabindex="31" @click="undo" :aria-label="$t('undo')" :disabled="doingUndoRedo|| !undoService.canUndo()" class="small"><i class="fas fa-undo"></i> <span class="hide-mobile">{{ $t('undo') }}</span></button>
-                <button tabindex="32" @click="redo"  :aria-label="$t('redo')" :disabled="doingUndoRedo || !undoService.canRedo()" class="small spaced"><i class="fas fa-redo"></i> <span class="hide-mobile">{{ $t('redo') }}</span></button>
-            </div>
         </header>
+        <!-- Property Transfer Header -->
         <header class="d-flex align-items-center transfer-props-header" role="toolbar" v-if="propTransferObject">
             <div class="me-5">
                 <strong class="me-2">
@@ -23,6 +44,21 @@
             <button class="mb-0 me-2" @click="stopPropTransfer" :title="$t('cancel')"><i class="fas fa-times"/> <span class="d-none d-lg-inline-block">{{ $t('cancel') }}</span></button>
             <button class="mb-0" @click="applyPropTransfer" :title="$t('ok')"><i class="fas fa-check"/> <span class="d-none d-lg-inline-block">{{ $t('ok') }}</span></button>
         </header>
+
+        <!-- Element Action Toolbar -->
+        <element-action-toolbar
+            v-if="!propTransferObject"
+            :selected-element-ids="markedElementIds"
+            @edit-element="editElement"
+            @show-navigation-setup="(id) => { editElementId = id; showNavigateModal = true; }"
+            @show-property-transfer="configPropTransfer"
+            @duplicate-elements="duplicateElements"
+            @copy-elements="copyElements"
+            @cut-elements="cutElements"
+            @hide-unhide-elements="hideUnhideElements"
+            @delete-elements="removeElements"
+            @clear-selection="unmarkAll"
+        />
         <div>
             <edit-element v-if="showEditModal" v-bind:edit-element-id-param="editElementId" :undo-service="undoService" :grid-data-id="gridData.id" :new-position="newPosition" @reload="reload" @close="showEditModal = false" @mark="markElement" @actions="(id) => {editElementId = id; showActionsModal = true}"/>
         </div>
