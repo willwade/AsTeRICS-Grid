@@ -107,7 +107,7 @@
         </header>
 
         <!-- Layout/Tools Dropdown Menu -->
-        <div v-if="showTools" class="tools-dropdown" ref="toolsDropdown">
+        <div v-if="showTools" class="tools-dropdown" ref="toolsDropdown" :style="dropdownStyle">
             <div class="tools-section">
                 <h4>{{ $t('layout') }}</h4>
                 <button @click="moveAllUp" class="dropdown-item">
