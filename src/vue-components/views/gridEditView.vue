@@ -8,6 +8,7 @@
             :can-redo="undoService && undoService.canRedo()"
             :grid-is-full="gridIsFull"
             :show-global-grid-button="showGlobalGridButton"
+            :selection-mode="selectionMode"
             @exit-edit-mode="back"
             @save="saveGrid"
             @show-grid-properties="showGridSettingsModal = true"
