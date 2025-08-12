@@ -262,6 +262,10 @@ let vueConfig = {
         createNewElementNormal() {
             this.newElement(GridElement.ELEMENT_TYPE_NORMAL);
         },
+        showNavigationSetup(id) {
+            this.editElementId = id;
+            this.showNavigateModal = true;
+        },
         configPropTransfer(id) {
             if (!id && this.markedElementIds.length !== 1) {
                 return;
