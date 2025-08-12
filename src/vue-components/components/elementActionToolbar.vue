@@ -6,11 +6,7 @@
     >
         <div class="selection-info">
             <span class="selected-count">
-                {{
-                    selectedElementIds.length === 1
-                        ? $t('elementSelected')
-                        : $t('elementsSelected', { count: selectedElementIds.length })
-                }}
+                {{ $t('selectedElementsContextMenu') }}
             </span>
         </div>
 
