@@ -300,7 +300,73 @@ let vueConfig = {
             if (!this.selectionMode) {
                 // Exit selection mode - clear any selections
                 this.unmarkAll();
+                this.selectedCells = [];
             }
+        },
+        handleCellSelect(cellData) {
+            const { x, y, event } = cellData;
+            const cellKey = `${x}-${y}`;
+
+            // Check if cell is already selected
+            const existingIndex = this.selectedCells.findIndex(cell => cell.x === x && cell.y === y);
+
+            if (event.ctrlKey || event.metaKey || this.usingTouchscreen) {
+                // Multi-select mode
+                if (existingIndex >= 0) {
+                    // Deselect if already selected
+                    this.selectedCells.splice(existingIndex, 1);
+                } else {
+                    // Add to selection
+                    this.selectedCells.push({ x, y });
+                }
+            } else {
+                // Single select mode
+                if (existingIndex >= 0 && this.selectedCells.length === 1) {
+                    // Deselect if it's the only selected cell
+                    this.selectedCells = [];
+                } else {
+                    // Replace selection
+                    this.selectedCells = [{ x, y }];
+                }
+            }
+
+            // Update markedElementIds for compatibility with existing toolbar
+            this.updateMarkedElementsFromSelection();
+        },
+        handleCellCreate(cellData) {
+            const { x, y } = cellData;
+            // Create new element at this position
+            this.newPosition = { x, y };
+            this.editElementId = null;
+            this.showEditModal = true;
+        },
+        handleCellClick(cellData) {
+            // Handle clicking on existing elements
+            const { x, y, event } = cellData;
+            const element = this.gridData.gridElements.find(el =>
+                x >= el.x && x < el.x + el.width &&
+                y >= el.y && y < el.y + el.height
+            );
+
+            if (element) {
+                this.markElement(element.id);
+            }
+        },
+        updateMarkedElementsFromSelection() {
+            // Convert selected cells to element IDs for compatibility
+            const elementIds = new Set();
+
+            this.selectedCells.forEach(cell => {
+                const element = this.gridData.gridElements.find(el =>
+                    cell.x >= el.x && cell.x < el.x + el.width &&
+                    cell.y >= el.y && cell.y < el.y + el.height
+                );
+                if (element) {
+                    elementIds.add(element.id);
+                }
+            });
+
+            this.markedElementIds = Array.from(elementIds);
         },
         configPropTransfer(id) {
             if (!id && this.markedElementIds.length !== 1) {
