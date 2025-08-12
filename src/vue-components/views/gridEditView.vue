@@ -336,6 +336,35 @@ let vueConfig = {
                 }
             }
         },
+        addEventListenersToGrid() {
+            let container = this.selectionMode
+                ? document.getElementById('selectable-grid-container')
+                : document.getElementById('normal-grid-container');
+
+            if (container) {
+                container.addEventListener('click', this.onClick);
+                container.addEventListener('touchstart', this.onTouchstart);
+                container.addEventListener('touchmove', this.onTouchEnd);
+                container.addEventListener('touchcancel', this.onTouchEnd);
+                container.addEventListener('touchend', this.onTouchEnd);
+                container.addEventListener('contextmenu', this.onContextMenu);
+            }
+        },
+        removeEventListenersFromGrid() {
+            let selectableContainer = document.getElementById('selectable-grid-container');
+            let normalContainer = document.getElementById('normal-grid-container');
+
+            [selectableContainer, normalContainer].forEach(container => {
+                if (container) {
+                    container.removeEventListener('click', this.onClick);
+                    container.removeEventListener('touchstart', this.onTouchstart);
+                    container.removeEventListener('touchmove', this.onTouchEnd);
+                    container.removeEventListener('touchcancel', this.onTouchEnd);
+                    container.removeEventListener('touchend', this.onTouchEnd);
+                    container.removeEventListener('contextmenu', this.onContextMenu);
+                }
+            });
+        },
         recalculateElementSize() {
             if (this.selectionMode) {
                 const container = document.getElementById('selectable-grid-container');
