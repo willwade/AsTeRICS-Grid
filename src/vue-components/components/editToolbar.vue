@@ -409,6 +409,11 @@ export default {
     border-color: #d39e00;
 }
 
+/* Ensure dropdown positioning works correctly */
+.toolbar-btn {
+    position: relative;
+}
+
 .toolbar-spacer {
     flex: 1;
 }
