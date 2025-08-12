@@ -128,7 +128,7 @@
                 v-if="showPropTransferModal"
                 :grid-id="gridData.id"
                 :grid-element-id="editElementId"
-                @start="(propTransferObject) => startPropTransfer(propTransferObject)"
+                @start="startPropTransfer"
                 @close="showPropTransferModal = false"
             ></transfer-props-modal>
         </div>
