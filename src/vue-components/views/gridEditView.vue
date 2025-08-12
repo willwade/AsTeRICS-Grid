@@ -269,6 +269,13 @@ let vueConfig = {
             this.editElementId = id;
             this.showNavigateModal = true;
         },
+        toggleSelectionMode() {
+            this.selectionMode = !this.selectionMode;
+            if (!this.selectionMode) {
+                // Exit selection mode - clear any selections
+                this.unmarkAll();
+            }
+        },
         configPropTransfer(id) {
             if (!id && this.markedElementIds.length !== 1) {
                 return;
