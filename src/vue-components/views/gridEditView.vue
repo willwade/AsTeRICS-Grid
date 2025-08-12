@@ -25,6 +25,7 @@
             @fill-with-empty="fillElements"
             @translate-grid="showTranslateModal = true"
             @clear-all-elements="clearElements"
+            @toggle-selection-mode="toggleSelectionMode"
         />
 
         <!-- Legacy elements kept for reference but hidden -->
