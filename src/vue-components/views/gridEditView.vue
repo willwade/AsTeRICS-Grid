@@ -287,6 +287,8 @@ let vueConfig = {
         selectionMode() {
             this.$nextTick(() => {
                 this.recalculateElementSize();
+                this.removeEventListenersFromGrid();
+                this.addEventListenersToGrid();
             });
         }
     },
