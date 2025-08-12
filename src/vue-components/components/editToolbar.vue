@@ -56,7 +56,7 @@
                 :aria-label="$t('selectedElementsContextMenu')"
                 ref="selectButton">
                 <i class="fas fa-mouse-pointer"></i>
-                <span class="btn-text">{{ selectionMode ? $t('clear') : $t('selectedElementsContextMenu') }}</span>
+                <span class="btn-text">{{ selectionMode ? $t('clear') : $t('select') }}</span>
             </button>
 
             <!-- Selection Mode Dropdown -->
