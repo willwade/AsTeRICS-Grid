@@ -140,7 +140,30 @@
             </div>
         </div>
         <div class="srow content d-flex" v-if="metadata && gridData" style="min-height: 0">
+            <!-- Selectable Grid Layout for Selection Mode -->
+            <div
+                v-if="selectionMode"
+                id="grid-container"
+                class="selectable-grid-container"
+                style="flex: 1; padding: 20px;">
+                <selectable-grid-layout
+                    :elements="gridData.gridElements"
+                    :rows="gridData.rowCount"
+                    :columns="gridData.minColumnCount"
+                    :background-color="metadata.colorConfig.gridBackgroundColor"
+                    :render-component="'app-grid-element'"
+                    :editable="true"
+                    :selection-mode="selectionMode"
+                    :selected-cells="selectedCells"
+                    @cell-select="handleCellSelect"
+                    @cell-create="handleCellCreate"
+                    @cell-click="handleCellClick"
+                />
+            </div>
+
+            <!-- Normal Grid Display for Edit Mode -->
             <app-grid-display
+                v-else
                 id="grid-container"
                 @changed="handleChange"
                 :grid-data="gridData"
