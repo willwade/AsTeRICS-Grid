@@ -34,15 +34,6 @@
                 <span class="btn-text">{{ $t('layout') }}</span>
             </button>
 
-            <button
-                @click="toggleSelectionMode"
-                class="toolbar-btn selection-mode-btn"
-                :class="{ 'active': selectionMode }"
-                :aria-label="$t('edit')">
-                <i class="fas fa-mouse-pointer"></i>
-                <span class="btn-text">{{ selectionMode ? $t('editingOff') : $t('edit') }}</span>
-            </button>
-
             <div class="toolbar-spacer"></div>
 
             <button @click="undo" class="toolbar-btn" :aria-label="$t('undo')" :disabled="!canUndo">
