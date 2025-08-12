@@ -1019,13 +1019,7 @@ let vueConfig = {
         thiz.showGrid = true;
         thiz.highlightElement();
         this.$nextTick(() => {
-            let container = document.getElementById('grid-container');
-            container.addEventListener('click', this.onClick);
-            container.addEventListener('touchstart', this.onTouchstart);
-            container.addEventListener('touchmove', this.onTouchEnd);
-            container.addEventListener('touchcancel', this.onTouchEnd);
-            container.addEventListener('touchend', this.onTouchEnd);
-            container.addEventListener('contextmenu', this.onContextMenu);
+            this.addEventListenersToGrid();
             collectElementService.initWithGrid(this.gridData);
             liveElementService.updateOnce({ elements: this.gridData.gridElements });
         });
@@ -1035,14 +1029,24 @@ let vueConfig = {
         $(document).off(constants.EVENT_DB_PULL_UPDATED, this.reloadFn);
         document.removeEventListener('keydown', this.onKeyDown);
         document.removeEventListener('keyup', this.onKeyUp);
-        let container = document.getElementById('grid-container');
-        if (container) {
-            container.removeEventListener('click', this.onClick);
-            container.removeEventListener('touchstart', this.onTouchstart);
-            container.removeEventListener('touchmove', this.onTouchEnd);
-            container.removeEventListener('touchcancel', this.onTouchEnd);
-            container.removeEventListener('touchend', this.onTouchEnd);
-            container.removeEventListener('contextmenu', this.onContextMenu);
+        this.removeEventListenersFromGrid();
+        let selectableContainer = document.getElementById('selectable-grid-container');
+        let normalContainer = document.getElementById('normal-grid-container');
+        if (selectableContainer) {
+            selectableContainer.removeEventListener('click', this.onClick);
+            selectableContainer.removeEventListener('touchstart', this.onTouchstart);
+            selectableContainer.removeEventListener('touchmove', this.onTouchEnd);
+            selectableContainer.removeEventListener('touchcancel', this.onTouchEnd);
+            selectableContainer.removeEventListener('touchend', this.onTouchEnd);
+            selectableContainer.removeEventListener('contextmenu', this.onContextMenu);
+        }
+        if (normalContainer) {
+            normalContainer.removeEventListener('click', this.onClick);
+            normalContainer.removeEventListener('touchstart', this.onTouchstart);
+            normalContainer.removeEventListener('touchmove', this.onTouchEnd);
+            normalContainer.removeEventListener('touchcancel', this.onTouchEnd);
+            normalContainer.removeEventListener('touchend', this.onTouchEnd);
+            normalContainer.removeEventListener('contextmenu', this.onContextMenu);
         }
         vueApp = null;
         $.contextMenu('destroy');
