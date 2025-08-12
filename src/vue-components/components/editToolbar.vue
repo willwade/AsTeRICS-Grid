@@ -28,7 +28,7 @@
                 <i class="fas fa-search"></i>
             </button>
 
-            <button @click="showLayoutOptions" class="toolbar-btn" :aria-label="$t('layout')">
+            <button @click="showLayoutOptions" class="toolbar-btn" :aria-label="$t('layout')" ref="layoutButton">
                 <i class="fas fa-th-large"></i>
                 <span class="btn-text">{{ $t('layout') }}</span>
             </button>
