@@ -4,8 +4,8 @@
         <edit-toolbar
             v-show="!propTransferObject"
             :can-save="true"
-            :can-undo="undoService.canUndo()"
-            :can-redo="undoService.canRedo()"
+            :can-undo="undoService && undoService.canUndo()"
+            :can-redo="undoService && undoService.canRedo()"
             :grid-is-full="gridIsFull"
             :show-global-grid-button="showGlobalGridButton"
             @exit-edit-mode="back"
