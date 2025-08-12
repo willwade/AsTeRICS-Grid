@@ -212,6 +212,7 @@ import { GridElementMatrixConversation } from '../../js/model/GridElementMatrixC
 import EditToolbar from '../components/editToolbar.vue';
 import ElementActionToolbar from '../components/elementActionToolbar.vue';
 import SelectableGridLayout from '../components/selectableGridLayout.vue';
+import AppGridElement from '../grid-display/appGridElement.vue';
 
 let vueApp = null;
 
