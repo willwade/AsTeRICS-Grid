@@ -143,6 +143,7 @@
             <!-- Selectable Grid Layout for Selection Mode -->
             <div
                 v-if="selectionMode"
+                key="selectable-grid"
                 id="selectable-grid-container"
                 class="selectable-grid-container"
                 style="flex: 1; padding: 20px;">
@@ -164,6 +165,7 @@
             <!-- Normal Grid Display for Edit Mode -->
             <app-grid-display
                 v-else
+                key="normal-grid"
                 id="normal-grid-container"
                 @changed="handleChange"
                 :grid-data="gridData"
