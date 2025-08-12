@@ -64,12 +64,6 @@
 
             <div class="toolbar-divider"></div>
 
-            <button @click="showToolsMenu" class="toolbar-btn tools-btn" :aria-label="$t('more')" ref="toolsButton">
-                <i class="fas fa-ellipsis-v"></i>
-            </button>
-
-            <div class="toolbar-divider"></div>
-
             <button @click="createNewElement" class="toolbar-btn new-element-btn" :aria-label="$t('newElement')">
                 <i class="fas fa-plus-square"></i>
                 <span class="btn-text">{{ $t('newElement') }}</span>
