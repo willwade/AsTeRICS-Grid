@@ -1353,4 +1353,16 @@ header {
 .content {
     outline: 2px solid lightgray;
 }
+
+.selectable-grid-container {
+    background: #f8f9fa;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Selection mode styles */
+.selectable-grid-container :deep(.selectable-grid-layout) {
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+}
 </style>
