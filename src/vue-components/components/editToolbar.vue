@@ -258,7 +258,27 @@ export default {
             this.showTools = false;
         },
         toggleSelectionMode() {
-            this.$emit('toggle-selection-mode');
+            if (this.selectionMode) {
+                // Exit selection mode
+                this.$emit('toggle-selection-mode');
+                this.showSelectionOptions = false;
+            } else {
+                // Show selection options
+                this.showSelectionOptions = !this.showSelectionOptions;
+                if (this.showSelectionOptions) {
+                    this.showTools = false; // Close layout dropdown if open
+                }
+            }
+        },
+        setSingleSelectMode() {
+            this.multiSelectMode = false;
+            this.showSelectionOptions = false;
+            this.$emit('toggle-selection-mode', { multiSelect: false });
+        },
+        setMultiSelectMode() {
+            this.multiSelectMode = true;
+            this.showSelectionOptions = false;
+            this.$emit('toggle-selection-mode', { multiSelect: true });
         },
         handleClickOutside(event) {
             if (
