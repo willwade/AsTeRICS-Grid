@@ -353,6 +353,17 @@ export default {
     border-color: #004085;
 }
 
+.selection-mode-btn.active {
+    background: #ffc107;
+    color: #212529;
+    border-color: #ffc107;
+}
+
+.selection-mode-btn.active:hover {
+    background: #e0a800;
+    border-color: #d39e00;
+}
+
 .toolbar-spacer {
     flex: 1;
 }
