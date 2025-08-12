@@ -543,8 +543,9 @@ export default {
     }
 
     .tools-dropdown {
-        left: 8px;
         right: 8px;
+        left: 8px;
+        transform: none !important;
     }
 }
 </style>
