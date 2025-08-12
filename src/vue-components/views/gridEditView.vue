@@ -246,7 +246,8 @@ let vueConfig = {
             usingTouchscreen: false,
             propTransferObject: null,
             selectionMode: false,
-            selectedCells: []
+            selectedCells: [],
+            AppGridElement: AppGridElement
         };
     },
     components: {
