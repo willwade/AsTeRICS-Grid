@@ -188,6 +188,7 @@ import TransferPropsModal from '../modals/transferPropsModal.vue';
 import { GridElementMatrixConversation } from '../../js/model/GridElementMatrixConversation';
 import EditToolbar from '../components/editToolbar.vue';
 import ElementActionToolbar from '../components/elementActionToolbar.vue';
+import SelectableGridLayout from '../components/selectableGridLayout.vue';
 
 let vueApp = null;
 
