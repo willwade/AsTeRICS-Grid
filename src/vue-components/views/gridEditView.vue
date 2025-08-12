@@ -151,7 +151,7 @@
                     :rows="gridData.rowCount"
                     :columns="gridData.minColumnCount"
                     :background-color="metadata.colorConfig.gridBackgroundColor"
-                    :render-component="'app-grid-element'"
+                    :render-component="AppGridElement"
                     :editable="true"
                     :selection-mode="selectionMode"
                     :selected-cells="selectedCells"
