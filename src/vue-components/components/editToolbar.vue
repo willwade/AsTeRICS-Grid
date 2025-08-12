@@ -87,7 +87,7 @@
             </button>
         </header>
 
-        <!-- Tools Dropdown Menu -->
+        <!-- Layout/Tools Dropdown Menu -->
         <div v-if="showTools" class="tools-dropdown" ref="toolsDropdown">
             <div class="tools-section">
                 <h4>{{ $t('layout') }}</h4>
