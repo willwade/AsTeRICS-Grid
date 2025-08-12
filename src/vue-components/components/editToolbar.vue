@@ -26,6 +26,7 @@
 
             <button @click="showSearch" class="toolbar-btn" :aria-label="$t('search')">
                 <i class="fas fa-search"></i>
+                <span class="btn-text search-text">{{ $t('search') }}</span>
             </button>
 
             <button @click="showLayoutOptions" class="toolbar-btn" :aria-label="$t('layout')" ref="layoutButton">
