@@ -120,7 +120,6 @@
     import { GridElementMatrixConversation } from '../../js/model/GridElementMatrixConversation';
     import EditToolbar from '../components/editToolbar.vue';
     import ElementActionToolbar from '../components/elementActionToolbar.vue';
-    import {MainVue} from "../../js/vue/mainVue.js";
 
     let vueApp = null;
 
