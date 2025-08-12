@@ -60,12 +60,7 @@
             v-if="!propTransferObject"
             :selected-element-ids="markedElementIds"
             @edit-element="editElement"
-            @show-navigation-setup="
-                (id) => {
-                    editElementId = id;
-                    showNavigateModal = true;
-                }
-            "
+            @show-navigation-setup="showNavigationSetup"
             @show-property-transfer="configPropTransfer"
             @duplicate-elements="duplicateElements"
             @copy-elements="copyElements"
