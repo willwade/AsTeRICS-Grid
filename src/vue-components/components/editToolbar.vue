@@ -56,7 +56,7 @@
             <div class="toolbar-divider"></div>
 
             <button @click="showToolsMenu" class="toolbar-btn tools-btn" :aria-label="$t('tools')" ref="toolsButton">
-                <i class="fas fa-tools"></i>
+                <i class="fas fa-ellipsis-v"></i>
             </button>
 
             <div class="toolbar-divider"></div>
