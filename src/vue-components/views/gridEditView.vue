@@ -156,6 +156,8 @@
                     :editable="true"
                     :selection-mode="selectionMode"
                     :selected-cells="selectedCells"
+                    :metadata="metadata"
+                    :one-element-size="oneElementSize"
                     @cell-select="handleCellSelect"
                     @cell-create="handleCellCreate"
                     @cell-click="handleCellClick"
