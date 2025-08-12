@@ -503,6 +503,10 @@ export default {
     font-weight: 500;
 }
 
+.layout-text {
+    margin: 0 auto;
+}
+
 @media (max-width: 768px) {
     .btn-text {
         display: none;
