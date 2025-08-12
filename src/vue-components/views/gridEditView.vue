@@ -252,7 +252,8 @@ let vueConfig = {
             selectionMode: false,
             selectedCells: [],
             multiSelectMode: false,
-            AppGridElement: AppGridElement
+            AppGridElement: AppGridElement,
+            oneElementSize: null
         };
     },
     components: {
@@ -276,6 +277,19 @@ let vueConfig = {
         showGlobalGridButton() {
             return !!(this.metadata && this.metadata.globalGridId && this.metadata.globalGridActive);
         }
+    },
+    watch: {
+        gridData() {
+            this.$nextTick(() => {
+                this.recalculateElementSize();
+            });
+        }
+    },
+    mounted() {
+        this.$nextTick(() => {
+            this.recalculateElementSize();
+        });
+    },
     },
     methods: {
         // New toolbar methods
@@ -315,6 +329,21 @@ let vueConfig = {
                     // Exit selection mode - clear any selections
                     this.unmarkAll();
                     this.selectedCells = [];
+                }
+            }
+        },
+        recalculateElementSize() {
+            if (this.selectionMode) {
+                const container = document.getElementById('selectable-grid-container');
+                if (container && this.gridData) {
+                    const containerSize = container.getBoundingClientRect();
+                    this.oneElementSize = gridUtil.getOneElementSize(containerSize, this.gridData);
+                }
+            } else {
+                const container = document.getElementById('normal-grid-container');
+                if (container && this.gridData) {
+                    const containerSize = container.getBoundingClientRect();
+                    this.oneElementSize = gridUtil.getOneElementSize(containerSize, this.gridData);
                 }
             }
         },
