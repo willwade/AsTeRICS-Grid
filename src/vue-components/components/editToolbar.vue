@@ -508,6 +508,10 @@ export default {
         display: none;
     }
 
+    .search-text {
+        display: none !important;
+    }
+
     .toolbar-btn {
         padding: 8px;
         min-width: 40px;
