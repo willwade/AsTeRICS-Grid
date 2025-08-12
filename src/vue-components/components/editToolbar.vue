@@ -37,7 +37,7 @@
                 @click="toggleSelectionMode"
                 class="toolbar-btn selection-mode-btn"
                 :class="{ 'active': selectionMode }"
-                :aria-label="$t('selectedElementsContextMenu')">
+                :aria-label="$t('edit')">
                 <i class="fas fa-mouse-pointer"></i>
                 <span class="btn-text">{{ selectionMode ? $t('editingOff') : $t('edit') }}</span>
             </button>
