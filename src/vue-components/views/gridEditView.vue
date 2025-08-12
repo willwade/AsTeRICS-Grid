@@ -146,7 +146,8 @@
                 key="selectable-grid"
                 id="selectable-grid-container"
                 class="selectable-grid-container"
-                style="flex: 1; padding: 20px;">
+                style="flex: 1; padding: 20px"
+            >
                 <selectable-grid-layout
                     :elements="gridData.gridElements"
                     :rows="gridData.rowCount"
@@ -310,7 +311,12 @@ let vueConfig = {
             MainVue.showSearchModal();
         },
         editGlobalGrid() {
-            if (this.metadata && this.metadata.globalGridId && this.gridData && this.metadata.globalGridId !== this.gridData.id) {
+            if (
+                this.metadata &&
+                this.metadata.globalGridId &&
+                this.gridData &&
+                this.metadata.globalGridId !== this.gridData.id
+            ) {
                 Router.toEditGrid(this.metadata.globalGridId);
             } else if (this.metadata && this.metadata.lastOpenedGridId) {
                 Router.toEditGrid(this.metadata.lastOpenedGridId);
@@ -360,7 +366,7 @@ let vueConfig = {
             let selectableContainer = document.getElementById('selectable-grid-container');
             let normalContainer = document.getElementById('normal-grid-container');
 
-            [selectableContainer, normalContainer].forEach(container => {
+            [selectableContainer, normalContainer].forEach((container) => {
                 if (container) {
                     container.removeEventListener('click', this.onClick);
                     container.removeEventListener('touchstart', this.onTouchstart);
@@ -390,7 +396,7 @@ let vueConfig = {
             const { x, y, event } = cellData;
 
             // Check if cell is already selected
-            const existingIndex = this.selectedCells.findIndex(cell => cell.x === x && cell.y === y);
+            const existingIndex = this.selectedCells.findIndex((cell) => cell.x === x && cell.y === y);
 
             if (this.multiSelectMode || event.ctrlKey || event.metaKey) {
                 // Multi-select mode
@@ -425,9 +431,8 @@ let vueConfig = {
         handleCellClick(cellData) {
             // Handle clicking on existing elements
             const { x, y, event } = cellData;
-            const element = this.gridData.gridElements.find(el =>
-                x >= el.x && x < el.x + el.width &&
-                y >= el.y && y < el.y + el.height
+            const element = this.gridData.gridElements.find(
+                (el) => x >= el.x && x < el.x + el.width && y >= el.y && y < el.y + el.height
             );
 
             if (element) {
@@ -438,10 +443,9 @@ let vueConfig = {
             // Convert selected cells to element IDs for compatibility
             const elementIds = new Set();
 
-            this.selectedCells.forEach(cell => {
-                const element = this.gridData.gridElements.find(el =>
-                    cell.x >= el.x && cell.x < el.x + el.width &&
-                    cell.y >= el.y && cell.y < el.y + el.height
+            this.selectedCells.forEach((cell) => {
+                const element = this.gridData.gridElements.find(
+                    (el) => cell.x >= el.x && cell.x < el.x + el.width && cell.y >= el.y && cell.y < el.y + el.height
                 );
                 if (element) {
                     elementIds.add(element.id);

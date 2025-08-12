@@ -1,5 +1,5 @@
 <template>
-    <div 
+    <div
         class="selectable-grid-layout"
         :style="`
             display: grid; 
@@ -9,8 +9,8 @@
             background-color: ${backgroundColor};
             width: 100%;
             height: 100%;
-        `">
-        
+        `"
+    >
         <!-- Render all grid cells -->
         <selectable-grid-cell
             v-for="cell in allCells"
@@ -24,8 +24,8 @@
             :is-empty="cell.isEmpty"
             @cell-select="handleCellSelect"
             @cell-create="handleCellCreate"
-            @cell-click="handleCellClick">
-            
+            @cell-click="handleCellClick"
+        >
             <!-- Render actual element if not empty -->
             <component
                 v-if="!cell.isEmpty"
@@ -35,7 +35,8 @@
                 :metadata="metadata"
                 :one-element-size="oneElementSize"
                 :editable="editable"
-                v-bind="$attrs"/>
+                v-bind="$attrs"
+            />
         </selectable-grid-cell>
     </div>
 </template>
@@ -83,22 +84,22 @@ export default {
         allCells() {
             const cells = [];
             const elementMap = new Map();
-            
+
             // Create a map of existing elements by position
-            this.elements.forEach(element => {
+            this.elements.forEach((element) => {
                 for (let x = element.x; x < element.x + element.width; x++) {
                     for (let y = element.y; y < element.y + element.height; y++) {
                         elementMap.set(`${x}-${y}`, element);
                     }
                 }
             });
-            
+
             // Generate all grid cells
             for (let y = 0; y < this.rows; y++) {
                 for (let x = 0; x < this.columns; x++) {
                     const key = `${x}-${y}`;
                     const existingElement = elementMap.get(key);
-                    
+
                     if (existingElement && existingElement.x === x && existingElement.y === y) {
                         // This is the top-left corner of an existing element
                         cells.push({
@@ -123,13 +124,13 @@ export default {
                     // Skip cells that are part of a larger element (not top-left corner)
                 }
             }
-            
+
             return cells;
         }
     },
     methods: {
         isCellSelected(x, y) {
-            return this.selectedCells.some(cell => cell.x === x && cell.y === y);
+            return this.selectedCells.some((cell) => cell.x === x && cell.y === y);
         },
         handleCellSelect(cellData) {
             this.$emit('cell-select', cellData);
@@ -141,7 +142,7 @@ export default {
             this.$emit('cell-click', cellData);
         }
     }
-}
+};
 </script>
 
 <style scoped>

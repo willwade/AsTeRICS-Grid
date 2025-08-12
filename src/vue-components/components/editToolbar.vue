@@ -52,23 +52,21 @@
             <button
                 @click="toggleSelectionMode"
                 class="toolbar-btn selection-mode-btn"
-                :class="{ 'active': selectionMode }"
+                :class="{ active: selectionMode }"
                 :aria-label="$t('selectedElementsContextMenu')"
-                ref="selectButton">
+                ref="selectButton"
+            >
                 <i class="fas fa-mouse-pointer"></i>
                 <span class="btn-text">{{ selectionMode ? $t('clear') : $t('select') }}</span>
             </button>
 
             <!-- Selection Mode Dropdown -->
-            <div
-                v-if="showSelectionOptions"
-                class="selection-dropdown"
-                ref="selectionDropdown">
-                <button @click="setSingleSelectMode" class="dropdown-item" :class="{ 'active': !multiSelectMode }">
+            <div v-if="showSelectionOptions" class="selection-dropdown" ref="selectionDropdown">
+                <button @click="setSingleSelectMode" class="dropdown-item" :class="{ active: !multiSelectMode }">
                     <i class="fas fa-mouse-pointer"></i>
                     {{ $t('selectedItem') }}
                 </button>
-                <button @click="setMultiSelectMode" class="dropdown-item" :class="{ 'active': multiSelectMode }">
+                <button @click="setMultiSelectMode" class="dropdown-item" :class="{ active: multiSelectMode }">
                     <i class="fas fa-hand-pointer"></i>
                     {{ $t('allSelected') }}
                 </button>
