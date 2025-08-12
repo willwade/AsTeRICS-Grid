@@ -245,6 +245,9 @@ export default {
             this.$emit('clear-all-elements');
             this.showTools = false;
         },
+        toggleSelectionMode() {
+            this.$emit('toggle-selection-mode');
+        },
         handleClickOutside(event) {
             if (
                 this.showTools &&
