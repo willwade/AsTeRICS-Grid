@@ -31,7 +31,7 @@
 
             <button @click="showLayoutOptions" class="toolbar-btn" :aria-label="$t('layout')" ref="layoutButton">
                 <i class="fas fa-th-large"></i>
-                <span class="btn-text">{{ $t('layout') }}</span>
+                <span class="btn-text layout-text">{{ $t('layout') }}</span>
             </button>
 
             <div class="toolbar-spacer"></div>
