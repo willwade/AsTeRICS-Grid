@@ -437,7 +437,6 @@ export default {
 .tools-dropdown {
     position: absolute;
     top: calc(100% + 4px);
-    left: 0;
     background: white;
     border: 1px solid #dee2e6;
     border-radius: 8px;
