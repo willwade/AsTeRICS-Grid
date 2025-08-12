@@ -146,6 +146,10 @@ export default {
             type: Boolean,
             default: false
         },
+        selectionMode: {
+            type: Boolean,
+            default: false
+        },
         gridIsFull: {
             type: Boolean,
             default: false
