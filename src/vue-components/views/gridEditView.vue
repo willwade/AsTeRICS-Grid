@@ -298,12 +298,19 @@ let vueConfig = {
             this.editElementId = id;
             this.showNavigateModal = true;
         },
-        toggleSelectionMode() {
-            this.selectionMode = !this.selectionMode;
-            if (!this.selectionMode) {
-                // Exit selection mode - clear any selections
-                this.unmarkAll();
-                this.selectedCells = [];
+        toggleSelectionMode(options = {}) {
+            if (options.multiSelect !== undefined) {
+                // Enter selection mode with specified multi-select setting
+                this.selectionMode = true;
+                this.multiSelectMode = options.multiSelect;
+            } else {
+                // Toggle selection mode
+                this.selectionMode = !this.selectionMode;
+                if (!this.selectionMode) {
+                    // Exit selection mode - clear any selections
+                    this.unmarkAll();
+                    this.selectedCells = [];
+                }
             }
         },
         handleCellSelect(cellData) {
