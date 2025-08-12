@@ -260,7 +260,8 @@ let vueConfig = {
         HeaderIcon,
         EditToolbar,
         ElementActionToolbar,
-        SelectableGridLayout
+        SelectableGridLayout,
+        AppGridElement
     },
     computed: {
         gridIsFull() {
