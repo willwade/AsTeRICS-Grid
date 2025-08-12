@@ -217,7 +217,8 @@ let vueConfig = {
             shiftKeyHold: false,
             ctrlKeyHold: false,
             usingTouchscreen: false,
-            propTransferObject: null
+            propTransferObject: null,
+            selectionMode: false
         };
     },
     components: {
