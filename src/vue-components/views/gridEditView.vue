@@ -258,9 +258,9 @@ let vueConfig = {
             MainVue.showSearchModal();
         },
         editGlobalGrid() {
-            if (this.metadata.globalGridId && this.metadata.globalGridId !== this.gridData.id) {
+            if (this.metadata && this.metadata.globalGridId && this.gridData && this.metadata.globalGridId !== this.gridData.id) {
                 Router.toEditGrid(this.metadata.globalGridId);
-            } else {
+            } else if (this.metadata && this.metadata.lastOpenedGridId) {
                 Router.toEditGrid(this.metadata.lastOpenedGridId);
             }
         },
