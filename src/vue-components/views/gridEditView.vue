@@ -242,7 +242,7 @@ let vueConfig = {
             return this.gridData ? new GridData({}, this.gridData).isFull() : false;
         },
         showGlobalGridButton() {
-            return this.metadata && this.metadata.globalGridId && this.metadata.globalGridActive;
+            return !!(this.metadata && this.metadata.globalGridId && this.metadata.globalGridActive);
         }
     },
     methods: {
