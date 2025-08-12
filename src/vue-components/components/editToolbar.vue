@@ -39,7 +39,7 @@
                 :class="{ 'active': selectionMode }"
                 :aria-label="$t('selectedElementsContextMenu')">
                 <i class="fas fa-mouse-pointer"></i>
-                <span class="btn-text">{{ selectionMode ? $t('editingOff') : $t('selectedElementsContextMenu') }}</span>
+                <span class="btn-text">{{ selectionMode ? $t('editingOff') : $t('edit') }}</span>
             </button>
 
             <div class="toolbar-spacer"></div>
