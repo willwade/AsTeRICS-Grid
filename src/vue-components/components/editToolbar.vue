@@ -203,6 +203,9 @@ export default {
         }
     },
     methods: {
+        exitEditMode() {
+            this.$emit('exit-edit-mode');
+        },
         save() {
             this.$emit('save');
         },
