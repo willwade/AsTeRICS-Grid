@@ -58,7 +58,7 @@
             <span class="btn-text">{{ $t('delete') }}</span>
         </button>
 
-        <button @click="clearSelection" class="action-btn clear-btn" :aria-label="$t('clearSelection')">
+        <button @click="clearSelection" class="action-btn clear-btn" :aria-label="$t('clear')">
             <i class="fas fa-times"></i>
         </button>
     </div>
