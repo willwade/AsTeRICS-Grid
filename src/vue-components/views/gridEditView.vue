@@ -342,9 +342,6 @@ let vueConfig = {
 
             // Update markedElementIds for compatibility with existing toolbar
             this.updateMarkedElementsFromSelection();
-
-            // Force update to ensure toolbar appears
-            this.$forceUpdate();
         },
         handleCellCreate(cellData) {
             const { x, y } = cellData;
