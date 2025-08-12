@@ -59,7 +59,7 @@
 
         <!-- Element Action Toolbar -->
         <element-action-toolbar
-            v-if="!propTransferObject"
+            v-if="!propTransferObject && (markedElementIds.length > 0 || selectedCells.length > 0)"
             :selected-element-ids="markedElementIds"
             @edit-element="editElement"
             @show-navigation-setup="showNavigationSetup"
