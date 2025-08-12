@@ -29,7 +29,7 @@
             </button>
 
             <button @click="showLayoutOptions" class="toolbar-btn" :aria-label="$t('layout')">
-                <i class="fas fa-th-large"></i>
+                <i class="fas fa-expand-arrows-alt"></i>
                 <span class="btn-text">{{ $t('layout') }}</span>
             </button>
 
