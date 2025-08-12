@@ -195,9 +195,6 @@ export default {
         copyAllElements() {
             this.$emit('copy-all-elements');
         },
-        showToolsMenu() {
-            this.showTools = !this.showTools;
-        },
         createNewElement() {
             this.$emit('create-new-element');
         },
