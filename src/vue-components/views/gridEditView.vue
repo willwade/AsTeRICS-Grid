@@ -248,7 +248,19 @@
                 initContextmenu();
             },
             moveAll: function(dir) {
-                this.gridData.gridElements = gridLayoutUtil.moveAsPossible(this.gridData.gridElements, this.gridData.gridElements, dir, {
+                // Convert string directions to constants
+                let direction = dir;
+                if (typeof dir === 'string') {
+                    const dirMap = {
+                        'up': gridLayoutUtil.DIR_UP,
+                        'right': gridLayoutUtil.DIR_RIGHT,
+                        'down': gridLayoutUtil.DIR_DOWN,
+                        'left': gridLayoutUtil.DIR_LEFT
+                    };
+                    direction = dirMap[dir] || dir;
+                }
+
+                this.gridData.gridElements = gridLayoutUtil.moveAsPossible(this.gridData.gridElements, this.gridData.gridElements, direction, {
                     outOfBounds: false,
                     gridWidth: gridUtil.getWidthWithBounds(this.gridData),
                     gridHeight: gridUtil.getHeightWithBounds(this.gridData)
