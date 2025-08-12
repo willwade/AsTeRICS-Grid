@@ -16,7 +16,7 @@
             @undo="undo"
             @redo="redo"
             @copy-all-elements="copyAllElements"
-            @create-new-element="() => newElement(GridElement.ELEMENT_TYPE_NORMAL)"
+            @create-new-element="createNewElementNormal"
             @create-many-elements="newElements"
             @edit-global-grid="editGlobalGrid"
             @move-all="moveAll"
