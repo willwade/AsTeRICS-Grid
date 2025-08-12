@@ -26,14 +26,11 @@
             @clear-all-elements="clearElements"
         />
 
-        <!-- Legacy header for property transfer mode -->
-        <header class="srow header legacy-header" role="toolbar" v-show="!propTransferObject" style="display: none;">
-            <header-icon class="left"></header-icon>
-            <button tabindex="30" @click="back" :aria-label="$t('editingOff')" class="spaced small left">
-                <i class="fas fa-eye"></i>
-                <span class="hide-mobile">{{ $t('editingOff') }}</span>
-            </button>
-        </header>
+        <!-- Legacy elements kept for reference but hidden -->
+        <div style="display: none;">
+            <button id="moreButton" :aria-label="$t('more')" class="spaced"><i class="fas fa-ellipsis-v"></i> <span class="hide-mobile">{{ $t('more') }}</span></button>
+            <div id="moreButtonMenu"></div>
+        </div>
         <!-- Property Transfer Header -->
         <header class="d-flex align-items-center transfer-props-header" role="toolbar" v-if="propTransferObject">
             <div class="me-5">
