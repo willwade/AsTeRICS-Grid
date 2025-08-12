@@ -27,12 +27,14 @@
             @cell-click="handleCellClick">
             
             <!-- Render actual element if not empty -->
-            <component 
+            <component
                 v-if="!cell.isEmpty"
-                :id="cell.element.id" 
-                :is="renderComponent" 
-                :element="cell.element" 
-                :editable="editable" 
+                :id="cell.element.id"
+                :is="renderComponent"
+                :element="cell.element"
+                :metadata="metadata"
+                :one-element-size="oneElementSize"
+                :editable="editable"
                 v-bind="$attrs"/>
         </selectable-grid-cell>
     </div>
@@ -67,6 +69,14 @@ export default {
         selectedCells: {
             type: Array,
             default: () => []
+        },
+        metadata: {
+            type: Object,
+            default: null
+        },
+        oneElementSize: {
+            type: Object,
+            default: null
         }
     },
     computed: {
