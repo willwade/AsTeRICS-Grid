@@ -183,7 +183,9 @@ export default {
     },
     data() {
         return {
-            showTools: false
+            showTools: false,
+            showSelectionOptions: false,
+            multiSelectMode: false
         };
     },
     methods: {
