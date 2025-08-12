@@ -264,6 +264,9 @@ let vueConfig = {
                 Router.toEditGrid(this.metadata.lastOpenedGridId);
             }
         },
+        createNewElementNormal() {
+            this.newElement(GridElement.ELEMENT_TYPE_NORMAL);
+        },
         configPropTransfer(id) {
             if (!id && this.markedElementIds.length !== 1) {
                 return;
