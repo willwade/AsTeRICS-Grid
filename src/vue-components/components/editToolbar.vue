@@ -116,7 +116,7 @@
             </div>
 
             <div class="tools-section">
-                <h4>{{ $t('grid') }}</h4>
+                <h4>{{ $t('gridSettings') }}</h4>
                 <button @click="translateGrid" class="dropdown-item">
                     <i class="fas fa-language"></i>
                     {{ $t('translateGrid') }}
