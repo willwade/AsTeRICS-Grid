@@ -283,6 +283,11 @@ let vueConfig = {
             this.$nextTick(() => {
                 this.recalculateElementSize();
             });
+        },
+        selectionMode() {
+            this.$nextTick(() => {
+                this.recalculateElementSize();
+            });
         }
     },
     mounted() {
