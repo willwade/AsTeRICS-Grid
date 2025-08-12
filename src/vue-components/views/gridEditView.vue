@@ -295,7 +295,6 @@ let vueConfig = {
             this.recalculateElementSize();
         });
     },
-    },
     methods: {
         // New toolbar methods
         saveGrid() {
