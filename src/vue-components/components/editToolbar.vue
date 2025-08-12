@@ -246,10 +246,10 @@ export default {
             if (
                 this.showTools &&
                 this.$refs.toolsDropdown &&
-                this.$refs.toolsButton &&
+                this.$refs.layoutButton &&
                 event.target &&
                 !this.$refs.toolsDropdown.contains(event.target) &&
-                !this.$refs.toolsButton.contains(event.target)
+                !this.$refs.layoutButton.contains(event.target)
             ) {
                 this.showTools = false;
             }
