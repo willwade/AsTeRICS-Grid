@@ -83,12 +83,12 @@
 
             <button @click="createNewElement" class="toolbar-btn new-element-btn" :aria-label="$t('newElement')">
                 <i class="fas fa-plus-square"></i>
-                <span class="btn-text">{{ $t('newElement') }}</span>
+                <span class="btn-text">+</span>
             </button>
 
             <button @click="createManyElements" class="toolbar-btn" :aria-label="$t('manyNewElements')">
                 <i class="fas fa-clone"></i>
-                <span class="btn-text">{{ $t('manyNewElements') }}</span>
+                <span class="btn-text">++</span>
             </button>
 
             <div class="toolbar-divider"></div>
