@@ -1,37 +1,32 @@
 <template>
-    <div 
-        v-if="selectedElementIds.length > 0" 
+    <div
+        v-if="selectedElementIds.length > 0"
         class="element-action-toolbar"
-        :class="{ 'single-element': selectedElementIds.length === 1 }">
-        
+        :class="{ 'single-element': selectedElementIds.length === 1 }"
+    >
         <div class="selection-info">
             <span class="selected-count">
-                {{ selectedElementIds.length === 1 ? $t('elementSelected') : $t('elementsSelected', {count: selectedElementIds.length}) }}
+                {{
+                    selectedElementIds.length === 1
+                        ? $t('elementSelected')
+                        : $t('elementsSelected', { count: selectedElementIds.length })
+                }}
             </span>
         </div>
 
         <!-- Single Element Actions -->
         <template v-if="selectedElementIds.length === 1">
-            <button 
-                @click="editElement" 
-                class="action-btn primary-action" 
-                :aria-label="$t('edit')">
+            <button @click="editElement" class="action-btn primary-action" :aria-label="$t('edit')">
                 <i class="fas fa-edit"></i>
                 <span class="btn-text">{{ $t('edit') }}</span>
             </button>
-            
-            <button 
-                @click="showNavigationSetup" 
-                class="action-btn" 
-                :aria-label="$t('navigateToOtherGrid')">
+
+            <button @click="showNavigationSetup" class="action-btn" :aria-label="$t('navigateToOtherGrid')">
                 <i class="fas fa-arrow-right"></i>
                 <span class="btn-text">{{ $t('navigation') }}</span>
             </button>
-            
-            <button 
-                @click="showPropertyTransfer" 
-                class="action-btn" 
-                :aria-label="$t('transferProperties')">
+
+            <button @click="showPropertyTransfer" class="action-btn" :aria-label="$t('transferProperties')">
                 <i class="fas fa-angle-double-right"></i>
                 <span class="btn-text">{{ $t('transferProperties') }}</span>
             </button>
@@ -39,34 +34,22 @@
 
         <!-- Multi-Element Actions -->
         <div class="action-group">
-            <button 
-                @click="duplicateElements" 
-                class="action-btn" 
-                :aria-label="$t('clone')">
+            <button @click="duplicateElements" class="action-btn" :aria-label="$t('clone')">
                 <i class="fas fa-clone"></i>
                 <span class="btn-text">{{ $t('clone') }}</span>
             </button>
-            
-            <button 
-                @click="copyElements" 
-                class="action-btn" 
-                :aria-label="$t('copy')">
+
+            <button @click="copyElements" class="action-btn" :aria-label="$t('copy')">
                 <i class="fas fa-copy"></i>
                 <span class="btn-text">{{ $t('copy') }}</span>
             </button>
-            
-            <button 
-                @click="cutElements" 
-                class="action-btn" 
-                :aria-label="$t('cut')">
+
+            <button @click="cutElements" class="action-btn" :aria-label="$t('cut')">
                 <i class="fas fa-cut"></i>
                 <span class="btn-text">{{ $t('cut') }}</span>
             </button>
-            
-            <button 
-                @click="hideUnhideElements" 
-                class="action-btn" 
-                :aria-label="$t('hideUnhide')">
+
+            <button @click="hideUnhideElements" class="action-btn" :aria-label="$t('hideUnhide')">
                 <i class="fas fa-eye-slash"></i>
                 <span class="btn-text">{{ $t('hideUnhide') }}</span>
             </button>
@@ -74,18 +57,12 @@
 
         <div class="action-spacer"></div>
 
-        <button 
-            @click="deleteElements" 
-            class="action-btn delete-btn" 
-            :aria-label="$t('delete')">
+        <button @click="deleteElements" class="action-btn delete-btn" :aria-label="$t('delete')">
             <i class="fas fa-trash"></i>
             <span class="btn-text">{{ $t('delete') }}</span>
         </button>
 
-        <button 
-            @click="clearSelection" 
-            class="action-btn clear-btn" 
-            :aria-label="$t('clearSelection')">
+        <button @click="clearSelection" class="action-btn clear-btn" :aria-label="$t('clearSelection')">
             <i class="fas fa-times"></i>
         </button>
     </div>
@@ -129,7 +106,7 @@ export default {
             this.$emit('clear-selection');
         }
     }
-}
+};
 </script>
 
 <style scoped>
@@ -145,7 +122,7 @@ export default {
     background: #fff;
     border: 1px solid #dee2e6;
     border-radius: 24px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
     z-index: 1000;
     max-width: 90vw;
     overflow-x: auto;
@@ -247,22 +224,22 @@ export default {
         padding: 8px 12px;
         gap: 4px;
     }
-    
+
     .btn-text {
         display: none;
     }
-    
+
     .action-btn {
         padding: 8px;
         min-width: 36px;
         justify-content: center;
     }
-    
+
     .selection-info {
         margin-right: 4px;
         padding-right: 4px;
     }
-    
+
     .selected-count {
         font-size: 10px;
     }
@@ -274,7 +251,7 @@ export default {
         right: 10px;
         transform: none;
     }
-    
+
     .action-group {
         gap: 2px;
     }

@@ -2,72 +2,45 @@
     <div class="edit-toolbar-container">
         <!-- Primary Toolbar -->
         <header class="primary-toolbar" role="toolbar">
-            <button
-                @click="exitEditMode"
-                class="toolbar-btn exit-edit-btn"
-                :aria-label="$t('editingOff')">
+            <button @click="exitEditMode" class="toolbar-btn exit-edit-btn" :aria-label="$t('editingOff')">
                 <i class="fas fa-eye"></i>
                 <span class="btn-text">{{ $t('editingOff') }}</span>
             </button>
 
             <div class="toolbar-divider"></div>
 
-            <button
-                @click="save"
-                class="toolbar-btn save-btn"
-                :aria-label="$t('save')"
-                :disabled="!canSave">
+            <button @click="save" class="toolbar-btn save-btn" :aria-label="$t('save')" :disabled="!canSave">
                 <i class="fas fa-check"></i>
                 <span class="btn-text">{{ $t('save') }}</span>
             </button>
-            
-            <button 
-                @click="showGridProperties" 
-                class="toolbar-btn" 
-                :aria-label="$t('gridSettings')">
+
+            <button @click="showGridProperties" class="toolbar-btn" :aria-label="$t('gridSettings')">
                 <i class="fas fa-cog"></i>
                 <span class="btn-text">{{ $t('gridProperties') }}</span>
             </button>
-            
-            <button 
-                @click="createNewGrid" 
-                class="toolbar-btn" 
-                :aria-label="$t('newGrid')">
+
+            <button @click="createNewGrid" class="toolbar-btn" :aria-label="$t('newGrid')">
                 <i class="fas fa-plus"></i>
                 <span class="btn-text">{{ $t('newGrid') }}</span>
             </button>
-            
-            <button 
-                @click="showSearch" 
-                class="toolbar-btn" 
-                :aria-label="$t('search')">
+
+            <button @click="showSearch" class="toolbar-btn" :aria-label="$t('search')">
                 <i class="fas fa-search"></i>
             </button>
-            
-            <button 
-                @click="showLayoutOptions" 
-                class="toolbar-btn" 
-                :aria-label="$t('layout')">
+
+            <button @click="showLayoutOptions" class="toolbar-btn" :aria-label="$t('layout')">
                 <i class="fas fa-th-large"></i>
                 <span class="btn-text">{{ $t('layout') }}</span>
             </button>
-            
+
             <div class="toolbar-spacer"></div>
-            
-            <button 
-                @click="undo" 
-                class="toolbar-btn" 
-                :aria-label="$t('undo')"
-                :disabled="!canUndo">
+
+            <button @click="undo" class="toolbar-btn" :aria-label="$t('undo')" :disabled="!canUndo">
                 <i class="fas fa-undo"></i>
                 <span class="btn-text">{{ $t('undo') }}</span>
             </button>
-            
-            <button 
-                @click="redo" 
-                class="toolbar-btn" 
-                :aria-label="$t('redo')"
-                :disabled="!canRedo">
+
+            <button @click="redo" class="toolbar-btn" :aria-label="$t('redo')" :disabled="!canRedo">
                 <i class="fas fa-redo"></i>
                 <span class="btn-text">{{ $t('redo') }}</span>
             </button>
@@ -75,59 +48,44 @@
 
         <!-- Secondary Toolbar -->
         <header class="secondary-toolbar" role="toolbar">
-            <button 
-                @click="copyAllElements" 
-                class="toolbar-btn" 
-                :aria-label="$t('copyAllElements')">
+            <button @click="copyAllElements" class="toolbar-btn" :aria-label="$t('copyAllElements')">
                 <i class="fas fa-copy"></i>
                 <span class="btn-text">{{ $t('copyAllElements') }}</span>
             </button>
-            
+
             <div class="toolbar-divider"></div>
-            
-            <button 
-                @click="showToolsMenu" 
-                class="toolbar-btn tools-btn" 
-                :aria-label="$t('tools')"
-                ref="toolsButton">
+
+            <button @click="showToolsMenu" class="toolbar-btn tools-btn" :aria-label="$t('tools')" ref="toolsButton">
                 <i class="fas fa-tools"></i>
             </button>
-            
+
             <div class="toolbar-divider"></div>
-            
-            <button 
-                @click="createNewElement" 
-                class="toolbar-btn new-element-btn" 
-                :aria-label="$t('newElement')">
+
+            <button @click="createNewElement" class="toolbar-btn new-element-btn" :aria-label="$t('newElement')">
                 <i class="fas fa-plus-square"></i>
                 <span class="btn-text">{{ $t('newElement') }}</span>
             </button>
-            
-            <button 
-                @click="createManyElements" 
-                class="toolbar-btn" 
-                :aria-label="$t('manyNewElements')">
+
+            <button @click="createManyElements" class="toolbar-btn" :aria-label="$t('manyNewElements')">
                 <i class="fas fa-clone"></i>
                 <span class="btn-text">{{ $t('manyNewElements') }}</span>
             </button>
-            
+
             <div class="toolbar-divider"></div>
-            
-            <button 
-                @click="editGlobalGrid" 
-                class="toolbar-btn" 
+
+            <button
+                @click="editGlobalGrid"
+                class="toolbar-btn"
                 :aria-label="$t('globalGrid')"
-                v-if="showGlobalGridButton">
+                v-if="showGlobalGridButton"
+            >
                 <i class="fas fa-globe"></i>
                 <span class="btn-text">{{ $t('globalGrid') }}</span>
             </button>
         </header>
 
         <!-- Tools Dropdown Menu -->
-        <div 
-            v-if="showTools" 
-            class="tools-dropdown"
-            ref="toolsDropdown">
+        <div v-if="showTools" class="tools-dropdown" ref="toolsDropdown">
             <div class="tools-section">
                 <h4>{{ $t('layout') }}</h4>
                 <button @click="moveAllUp" class="dropdown-item">
@@ -156,7 +114,7 @@
                     {{ $t('fillWithEmptyElements') }}
                 </button>
             </div>
-            
+
             <div class="tools-section">
                 <h4>{{ $t('grid') }}</h4>
                 <button @click="translateGrid" class="dropdown-item">
@@ -200,7 +158,7 @@ export default {
     data() {
         return {
             showTools: false
-        }
+        };
     },
     methods: {
         exitEditMode() {
@@ -275,7 +233,12 @@ export default {
             this.showTools = false;
         },
         handleClickOutside(event) {
-            if (this.showTools && this.$refs.toolsDropdown && !this.$refs.toolsDropdown.contains(event.target) && !this.$refs.toolsButton.contains(event.target)) {
+            if (
+                this.showTools &&
+                this.$refs.toolsDropdown &&
+                !this.$refs.toolsDropdown.contains(event.target) &&
+                !this.$refs.toolsButton.contains(event.target)
+            ) {
                 this.showTools = false;
             }
         }
@@ -286,7 +249,7 @@ export default {
     beforeDestroy() {
         document.removeEventListener('click', this.handleClickOutside);
     }
-}
+};
 </script>
 
 <style scoped>
@@ -296,7 +259,7 @@ export default {
     z-index: 1000;
     background: #fff;
     border-bottom: 1px solid #e0e0e0;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .primary-toolbar,
@@ -390,7 +353,7 @@ export default {
     background: white;
     border: 1px solid #dee2e6;
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     z-index: 1001;
     min-width: 220px;
     max-height: 400px;
@@ -452,13 +415,13 @@ export default {
     .btn-text {
         display: none;
     }
-    
+
     .toolbar-btn {
         padding: 8px;
         min-width: 40px;
         justify-content: center;
     }
-    
+
     .primary-toolbar,
     .secondary-toolbar {
         padding: 6px 8px;
@@ -470,7 +433,7 @@ export default {
     .toolbar-divider {
         display: none;
     }
-    
+
     .tools-dropdown {
         left: 8px;
         right: 8px;
