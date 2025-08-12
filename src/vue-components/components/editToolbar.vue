@@ -422,8 +422,8 @@ export default {
 
 .tools-dropdown {
     position: absolute;
-    top: 100%;
-    left: 16px;
+    top: calc(100% + 4px);
+    left: 0;
     background: white;
     border: 1px solid #dee2e6;
     border-radius: 8px;
@@ -432,6 +432,19 @@ export default {
     min-width: 220px;
     max-height: 400px;
     overflow-y: auto;
+}
+
+.selection-dropdown {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1001;
+    min-width: 180px;
+    padding: 8px;
 }
 
 .tools-section {
