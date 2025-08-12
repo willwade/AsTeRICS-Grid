@@ -320,7 +320,7 @@ let vueConfig = {
             // Check if cell is already selected
             const existingIndex = this.selectedCells.findIndex(cell => cell.x === x && cell.y === y);
 
-            if (event.ctrlKey || event.metaKey || this.usingTouchscreen) {
+            if (this.multiSelectMode || event.ctrlKey || event.metaKey) {
                 // Multi-select mode
                 if (existingIndex >= 0) {
                     // Deselect if already selected
