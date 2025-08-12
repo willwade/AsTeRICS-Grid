@@ -234,7 +234,8 @@ let vueConfig = {
         AddMultipleModal,
         HeaderIcon,
         EditToolbar,
-        ElementActionToolbar
+        ElementActionToolbar,
+        SelectableGridLayout
     },
     computed: {
         gridIsFull() {
