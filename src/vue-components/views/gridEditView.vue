@@ -248,8 +248,8 @@ let vueConfig = {
     methods: {
         // New toolbar methods
         saveGrid() {
-            // Grid auto-saves, but this could trigger explicit save
-            this.$emit('grid-saved');
+            // Grid auto-saves, this method is for explicit save actions
+            // No emit needed as the grid auto-saves on changes
         },
         createNewGrid() {
             Router.toManageGrids();
