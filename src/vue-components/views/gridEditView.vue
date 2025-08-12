@@ -169,7 +169,33 @@
             EditToolbar,
             ElementActionToolbar
         },
+        computed: {
+            gridIsFull() {
+                return this.gridData ? new GridData({}, this.gridData).isFull() : false;
+            },
+            showGlobalGridButton() {
+                return this.metadata && this.metadata.globalGridId && this.metadata.globalGridActive;
+            }
+        },
         methods: {
+            // New toolbar methods
+            saveGrid() {
+                // Grid auto-saves, but this could trigger explicit save
+                this.$emit('grid-saved');
+            },
+            createNewGrid() {
+                Router.toManageGrids();
+            },
+            showSearch() {
+                MainVue.showSearchModal();
+            },
+            editGlobalGrid() {
+                if (this.metadata.globalGridId && this.metadata.globalGridId !== this.gridData.id) {
+                    Router.toEditGrid(this.metadata.globalGridId);
+                } else {
+                    Router.toEditGrid(this.metadata.lastOpenedGridId);
+                }
+            },
             configPropTransfer(id) {
                 if (!id && this.markedElementIds.length !== 1) {
                     return;
