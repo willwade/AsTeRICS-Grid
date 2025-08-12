@@ -162,7 +162,12 @@
             AppGridDisplay,
             SetNavigationModal,
             GridTranslateModal,
-            GridSettingsModal, EditElement, AddMultipleModal, HeaderIcon
+            GridSettingsModal,
+            EditElement,
+            AddMultipleModal,
+            HeaderIcon,
+            EditToolbar,
+            ElementActionToolbar
         },
         methods: {
             configPropTransfer(id) {
