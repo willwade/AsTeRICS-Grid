@@ -1,9 +1,9 @@
-import {constants} from "../util/constants.js";
-import {audioUtil} from "../util/audioUtil.js";
-import {i18nService} from "./i18nService.js";
-import $ from "../externals/jquery.js";
-import {localStorageService} from "./data/localStorageService.js";
-import {GridActionSpeakCustom} from "../model/GridActionSpeakCustom.js";
+import { constants } from '../util/constants.js';
+import { audioUtil } from '../util/audioUtil.js';
+import { i18nService } from './i18nService.js';
+import $ from '../externals/jquery.js';
+import { localStorageService } from './data/localStorageService.js';
+import { GridActionSpeakCustom } from '../model/GridActionSpeakCustom.js';
 
 let speechServiceExternal = {};
 
@@ -19,7 +19,7 @@ let _caching = false;
 let speakFetchController = new AbortController();
 let speakFetchSignal = speakFetchController.signal;
 
-speechServiceExternal.speak = async function (text, providerId, voice) {
+speechServiceExternal.speak = async function (text, providerId, voice, options = {}) {
     if (!externalSpeechServiceUrl) {
         return;
     }
@@ -27,14 +27,15 @@ speechServiceExternal.speak = async function (text, providerId, voice) {
     text = encodeURIComponent(text);
     providerId = encodeURIComponent(providerId);
     let voiceId = encodeURIComponent(voice.id);
+    let endpoint = options.ipa ? 'speakipa' : 'speak';
     if (voice.type === constants.VOICE_TYPE_EXTERNAL_PLAYING) {
-        fetchErrorHandling(`${externalSpeechServiceUrl}/speak/${text}/${providerId}/${voiceId}`);
+        fetchErrorHandling(`${externalSpeechServiceUrl}/${endpoint}/${text}/${providerId}/${voiceId}`);
     } else if (voice.type === constants.VOICE_TYPE_EXTERNAL_DATA) {
         speakFetchController.abort();
         speakFetchController = new AbortController();
         speakFetchSignal = speakFetchController.signal;
         let response = await fetchErrorHandling(
-            `${externalSpeechServiceUrl}/speakdata/${text}/${providerId}/${voiceId}`,
+            `${externalSpeechServiceUrl}/${endpoint}data/${text}/${providerId}/${voiceId}`,
             {
                 signal: speakFetchSignal,
                 noLogErrorNames: ['AbortError']
@@ -46,7 +47,7 @@ speechServiceExternal.speak = async function (text, providerId, voice) {
         let blob = await response.blob();
         let binary = new Uint8Array(await blob.arrayBuffer());
         if (binary.length === 0) {
-            log.warn("got no data from external speech service.");
+            log.warn('got no data from external speech service.');
             return;
         }
         await audioUtil.playAudioUint8(binary, {
@@ -69,9 +70,9 @@ speechServiceExternal.getVoices = async function (url) {
     let result = await fetchErrorHandling(`${url}/voices`, {
         timeout: 3000
     });
-    lastGetVoicesResult = result ? (await result.json()) : [];
+    lastGetVoicesResult = result ? await result.json() : [];
     lastGetVoicesTime = new Date().getTime();
-    return lastGetVoicesResult
+    return lastGetVoicesResult;
 };
 
 speechServiceExternal.stop = function () {
@@ -96,15 +97,15 @@ speechServiceExternal.isSpeaking = async function () {
         return lastSpeakingResult;
     }
     let result = await fetchErrorHandling(`${externalSpeechServiceUrl}/speaking`);
-    let speaking = result ? (await result.json()) : false;
+    let speaking = result ? await result.json() : false;
     lastSpeakingRequestTime = new Date().getTime();
     lastSpeakingResult = speaking;
     return speaking;
-}
+};
 
 speechServiceExternal.cacheAll = async function (grids, externalVoice, progressFn) {
     if (!externalSpeechServiceUrl || _caching) {
-        log.info("not starting caching, because no external provider defined or caching already in progress.");
+        log.info('not starting caching, because no external provider defined or caching already in progress.');
         return;
     }
     _caching = true;
@@ -123,7 +124,8 @@ speechServiceExternal.cacheAll = async function (grids, externalVoice, progressF
         if (label) {
             allStrings.push(label);
         }
-        let speakCustomActions = element.actions.filter(a => a.modelName === GridActionSpeakCustom.getModelName()) || [];
+        let speakCustomActions =
+            element.actions.filter((a) => a.modelName === GridActionSpeakCustom.getModelName()) || [];
         for (let action of speakCustomActions) {
             let speakText = i18nService.getTranslation(action.speakText);
             allStrings.push(speakText);
@@ -155,7 +157,7 @@ speechServiceExternal.validateUrl = async function (url) {
     }
     let voices = await speechServiceExternal.getVoices(url);
     return voices.length > 0;
-}
+};
 
 /**
  * fetch request with error handling.

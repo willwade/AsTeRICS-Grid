@@ -17,10 +17,10 @@ import { GridActionSpeak } from '../model/GridActionSpeak.js';
 import { GridActionSpeakCustom } from '../model/GridActionSpeakCustom.js';
 import { dataService } from './data/dataService.js';
 import { GridActionAudio } from '../model/GridActionAudio.js';
-import {arasaacService} from "./pictograms/arasaacService.js";
-import {GridActionWordForm} from "../model/GridActionWordForm.js";
-import {stateService} from "./stateService.js";
-import {MapCache} from "../util/MapCache.js";
+import { arasaacService } from './pictograms/arasaacService.js';
+import { GridActionWordForm } from '../model/GridActionWordForm.js';
+import { stateService } from './stateService.js';
+import { MapCache } from '../util/MapCache.js';
 import { liveElementService } from './liveElementService';
 import { MetaData } from '../model/MetaData';
 import { GridData } from '../model/GridData';
@@ -37,6 +37,7 @@ let collectMode = GridElementCollect.MODE_AUTO;
 let convertToLowercaseIfKeyboard = true;
 let convertMode = null;
 let activateARASAACGrammarAPI = false;
+let ipaPronunciation = false;
 
 let duplicatedCollectPause = 0;
 let lastCollectId = null;
@@ -72,6 +73,7 @@ collectElementService.initWithGrid = function (gridData, dontAutoPredict) {
                 }, null);
             collectMode = copy.mode || collectMode;
             convertToLowercaseIfKeyboard = copy.convertToLowercase !== false;
+            ipaPronunciation = copy.ipaPronunciation || ipaPronunciation;
             registeredCollectElements.push(copy);
         }
     });
@@ -88,15 +90,15 @@ collectElementService.initWithGrid = function (gridData, dontAutoPredict) {
     }
 };
 
-collectElementService.clearCollectElements = function() {
+collectElementService.clearCollectElements = function () {
     $('.collect-container').empty();
-}
+};
 
 /**
  * does ARASAAC grammar correction for the current collected sentence (if enabled in settings)
  * @returns {Promise<void>}
  */
-collectElementService.doARASAACGrammarCorrection = async function() {
+collectElementService.doARASAACGrammarCorrection = async function () {
     if (activateARASAACGrammarAPI) {
         let speakText = getPrintText({ inlcudeCorrectedGrammar: false });
         speakText = await arasaacService.getCorrectGrammar(speakText);
@@ -105,7 +107,7 @@ collectElementService.doARASAACGrammarCorrection = async function() {
             await updateCollectElements();
         }
     }
-}
+};
 
 collectElementService.doCollectElementActions = async function (action) {
     if (!action) {
@@ -114,8 +116,13 @@ collectElementService.doCollectElementActions = async function (action) {
     if (GridActionCollectElement.isSpeakAction(action)) {
         await collectElementService.doARASAACGrammarCorrection();
     }
-    let speakText = getPrintText({ dontIncludePronunciation: false });
     let speakArray = getSpeakArray();
+    let speakText = speakArray.map((o) => o.text).join(' ');
+    let ipaText = speakArray.map((o) => o.ipa || o.text).join(' ');
+    let speakOptions = {};
+    if (speakArray.some((o) => o.ipa)) {
+        speakOptions.ipa = ipaText;
+    }
     switch (action) {
         case GridActionCollectElement.COLLECT_ACTION_SPEAK:
             if (isSeparateMode(collectMode)) {
@@ -124,14 +131,14 @@ collectElementService.doCollectElementActions = async function (action) {
                     updateCollectElements();
                 });
             } else {
-                speechService.speak(speakText);
+                speechService.speak(speakText, speakOptions);
             }
             break;
         case GridActionCollectElement.COLLECT_ACTION_SPEAK_CONTINUOUS:
-            speechService.speak(speakText);
+            speechService.speak(speakText, speakOptions);
             break;
         case GridActionCollectElement.COLLECT_ACTION_SPEAK_CONTINUOUS_CLEAR:
-            speechService.speak(speakText);
+            speechService.speak(speakText, speakOptions);
             await speechService.waitForFinishedSpeaking();
             clearAll();
             break;
@@ -145,7 +152,7 @@ collectElementService.doCollectElementActions = async function (action) {
                     }
                 });
             } else {
-                speechService.speak(speakText);
+                speechService.speak(speakText, speakOptions);
                 speechService.doAfterFinishedSpeaking(() => {
                     clearAll();
                 });
@@ -229,7 +236,10 @@ collectElementService.addWordFormTagsToLast = function (tags, toggle) {
         lastElementCopy.wordFormTags = lastElementCopy.wordFormTags || [];
         let currentLabel = getPrintTextOfElement(lastElementCopy);
         lastElementCopy.wordFormTags = stateService.mergeTags(lastElementCopy.wordFormTags, tags, toggle);
-        let newLabel = stateService.getWordForm(lastElementCopy, {searchTags: lastElementCopy.wordFormTags, searchSubTags: true});
+        let newLabel = stateService.getWordForm(lastElementCopy, {
+            searchTags: lastElementCopy.wordFormTags,
+            searchSubTags: true
+        });
         if (newLabel && newLabel !== currentLabel) {
             collectedElements[collectedElements.length - 1] = lastElementCopy;
             updateCollectElements();
@@ -253,16 +263,16 @@ collectElementService.fixateLastWordForm = function () {
     if (lastElement) {
         lastElement.wordFormFixated = true;
     }
-}
+};
 
 /**
  * @return returns true if the current grid is (probably) a keyboard
  */
 collectElementService.isCurrentGridKeyboard = function () {
     return keyboardLikeFactor > 0.4;
-}
+};
 
-collectElementService.hasCollectedImage = function() {
+collectElementService.hasCollectedImage = function () {
     return collectedElements.some((e) => !!getImageData(e));
 };
 
@@ -310,7 +320,7 @@ function getActionsOfType(elem, type) {
     if (!elem) {
         return [];
     }
-    return elem.actions.filter(action => action.modelName === type);
+    return elem.actions.filter((action) => action.modelName === type);
 }
 
 function getActionTypes(elem) {
@@ -325,7 +335,9 @@ async function updateCollectElements(isSecondTry) {
         let imageMode = isSeparateMode(collectElement.mode);
         let outerContainerJqueryElem = $(`#${collectElement.id} .collect-outer-container`);
         let darkMode = metadata.colorConfig.elementBackgroundColor === constants.DEFAULT_ELEMENT_BACKGROUND_COLOR_DARK;
-        let backgroundColor = darkMode ? constants.DEFAULT_COLLECT_ELEMENT_BACKGROUND_COLOR_DARK : constants.DEFAULT_COLLECT_ELEMENT_BACKGROUND_COLOR;
+        let backgroundColor = darkMode
+            ? constants.DEFAULT_COLLECT_ELEMENT_BACKGROUND_COLOR_DARK
+            : constants.DEFAULT_COLLECT_ELEMENT_BACKGROUND_COLOR;
         let textColor = darkMode ? constants.DEFAULT_ELEMENT_FONT_COLOR_DARK : constants.DEFAULT_ELEMENT_FONT_COLOR;
         if (!imageMode) {
             let text = getPrintText();
@@ -484,36 +496,53 @@ function getOutputObject(element, options) {
             base64Sound: audioAction.dataBase64
         };
     }
-    let text = options.inlcudeCorrectedGrammar ? element.fixedGrammarText : null;
+    let speakText = options.inlcudeCorrectedGrammar ? element.fixedGrammarText : null;
     let customSpeakAction = element.actions.filter((a) => a.modelName === GridActionSpeakCustom.getModelName())[0];
-    if (!text && customSpeakAction) {
+    if (!speakText && customSpeakAction) {
         let lang = customSpeakAction.speakLanguage || i18nService.getContentLang();
-        text = i18nService.getTranslation(customSpeakAction.speakText, { lang: lang });
+        speakText = i18nService.getTranslation(customSpeakAction.speakText, { lang: lang });
     }
-    if (!text) {
-        let wordForm = stateService.getWordFormObject(element, {searchTags: element.wordFormTags, wordFormId: element.wordFormId, searchSubTags: true}) || {};
-        if (!options.dontIncludePronunciation) {
-            text = wordForm.pronunciation;
-        }
-        text = text || wordForm.value;
+    let wordForm =
+        stateService.getWordFormObject(element, {
+            searchTags: element.wordFormTags,
+            wordFormId: element.wordFormId,
+            searchSubTags: true
+        }) || {};
+    if (!options.dontIncludePronunciation) {
+        speakText = speakText || wordForm.pronunciation;
     }
-    if (!text) {
-        text = getLabel(element);
+    let printText = wordForm.value;
+    if (!printText) {
+        printText = getLabel(element);
     }
-    if (!text) {
-        text = stateService.getFirstForm(element);
+    if (!printText) {
+        printText = stateService.getFirstForm(element);
     }
-    text = util.convertLowerUppercase(text, convertMode);
-    return {
-        text: text
+    speakText = speakText || printText;
+    printText = printText || speakText;
+    printText = util.convertLowerUppercase(printText, convertMode);
+    speakText = util.convertLowerUppercase(speakText, convertMode);
+    let result = {
+        text: speakText,
+        printText: printText
     };
+    if (ipaPronunciation && !options.dontIncludePronunciation) {
+        result.ipa = speakText;
+    }
+    return result;
 }
 
 function getSpeakArray(options) {
     options = options || {};
     options.inlcudeCorrectedGrammar =
         options.inlcudeCorrectedGrammar !== undefined ? options.inlcudeCorrectedGrammar : true;
-    return collectedElements.map((e) => getOutputObject(e, options));
+    return collectedElements.map((e) => {
+        let obj = getOutputObject(e, options);
+        if (obj.base64Sound) {
+            return { base64Sound: obj.base64Sound };
+        }
+        return { text: obj.text, ipa: obj.ipa };
+    });
 }
 
 function getPrintText(options) {
@@ -524,22 +553,25 @@ function getPrintText(options) {
         options.dontIncludePronunciation !== undefined ? options.dontIncludePronunciation : true;
     options.inlcudeCorrectedGrammar =
         options.inlcudeCorrectedGrammar !== undefined ? options.inlcudeCorrectedGrammar : true;
-    let textArray = collectedElements.map((e) => getOutputObject(e, options).text)
+    let textArray = collectedElements.map((e) => {
+        let obj = getOutputObject(e, options);
+        return obj.printText || obj.text || '';
+    });
     let returnValue = options.trim ? textArray.join(' ').trim() : textArray.join(' ');
     return returnValue.replace(/\s+/g, ' ');
 }
 
 function getPredictText() {
-    return getPrintText({trim: false});
+    return getPrintText({ trim: false });
 }
 
 function getPrintTextOfElement(element) {
-    let textObject = getOutputObject(element,  {
+    let textObject = getOutputObject(element, {
         dontIncludePronunciation: true,
         dontIncludeAudio: true,
         inlcudeCorrectedGrammar: true
     });
-    return textObject && textObject.text ? textObject.text : '';
+    return textObject && (textObject.printText || textObject.text) ? textObject.printText || textObject.text : '';
 }
 
 function addTextElem(text) {
@@ -577,7 +609,10 @@ $(window).on(constants.ELEMENT_EVENT_ID, function (event, element) {
         return; // no adding of text if the element contains an navigate action and it's no single keyboard character
     }
     let wordFormActions = getActionsOfType(element, GridActionWordForm.getModelName());
-    if (wordFormActions.length > 0 && wordFormActions.some(a => a.type === GridActionWordForm.WORDFORM_MODE_NEXT_FORM)) {
+    if (
+        wordFormActions.length > 0 &&
+        wordFormActions.some((a) => a.type === GridActionWordForm.WORDFORM_MODE_NEXT_FORM)
+    ) {
         return; // no adding, since the action itself adds the element
     }
     if (element.dontCollect) {
@@ -618,11 +653,7 @@ $(window).on(constants.ELEMENT_EVENT_ID, function (event, element) {
             let lastElem = getLastElement();
             let lastLabel = getLabel(lastElem);
             let lastWord = lastLabel ? lastLabel.split(' ').pop() : '';
-            if (
-                lastElem &&
-                lastElem.onlyText &&
-                word.toLowerCase().startsWith(lastWord.toLowerCase())
-            ) {
+            if (lastElem && lastElem.onlyText && word.toLowerCase().startsWith(lastWord.toLowerCase())) {
                 let parts = lastLabel.split(' ');
                 parts[parts.length - 1] = word;
                 setLabel(lastElem, parts.join(' ') + ' ');

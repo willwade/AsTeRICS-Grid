@@ -27,7 +27,7 @@ let hasSpoken = false;
 let isSpeakingNative = false;
 let startedSpeakingRV = false;
 let _initPromiseResolveFn;
-let initPromise = new Promise(resolve => {
+let initPromise = new Promise((resolve) => {
     _initPromiseResolveFn = resolve;
 });
 
@@ -84,8 +84,12 @@ speechService.speak = function (textOrOject, options = {}) {
     if (!text) {
         return;
     }
-    text = text.toLowerCase();
-    if (options.voiceLangIsTextLang &&
+    let ipa = options.ipa;
+    if (!ipa) {
+        text = text.toLowerCase();
+    }
+    if (
+        options.voiceLangIsTextLang &&
         preferredVoiceId &&
         i18nService.getBaseLang(prefVoiceLang) !== i18nService.getBaseLang(langToUse) &&
         getVoicesByLang(langToUse).length > 0
@@ -104,7 +108,10 @@ speechService.speak = function (textOrOject, options = {}) {
     let voices = getVoicesById(preferredVoiceId) || getVoicesByLang(langToUse);
     let nativeVoices = voices.filter((voice) => voice.type === constants.VOICE_TYPE_NATIVE);
     let responsiveVoices = voices.filter((voice) => voice.type === constants.VOICE_TYPE_RESPONSIVEVOICE);
-    let externalVoices = voices.filter((voice) => voice.type === constants.VOICE_TYPE_EXTERNAL_PLAYING || voice.type === constants.VOICE_TYPE_EXTERNAL_DATA);
+    let externalVoices = voices.filter(
+        (voice) =>
+            voice.type === constants.VOICE_TYPE_EXTERNAL_PLAYING || voice.type === constants.VOICE_TYPE_EXTERNAL_DATA
+    );
     if (speechService.nativeSpeechSupported() && nativeVoices.length > 0) {
         var msg = new SpeechSynthesisUtterance(text);
         msg.voice = nativeVoices[0].ref;
@@ -112,7 +119,7 @@ speechService.speak = function (textOrOject, options = {}) {
         msg.pitch = isSelectedVoice && !options.useStandardRatePitch ? _voicePitch : 1;
         msg.rate = options.rate || (isSelectedVoice && !options.useStandardRatePitch ? _voiceRate : 1);
         msg.volume = userSettings.systemVolume / 100.0;
-        log.debug("speak volume", userSettings.systemVolume);
+        log.debug('speak volume', userSettings.systemVolume);
         if (options.progressFn) {
             msg.addEventListener('boundary', options.progressFn);
             msg.addEventListener('end', options.progressFn);
@@ -124,7 +131,7 @@ speechService.speak = function (textOrOject, options = {}) {
         });
         msg.addEventListener('end', () => {
             isSpeakingNative = false;
-        })
+        });
     } else if (responsiveVoices.length > 0) {
         let isSelectedVoice = responsiveVoices[0].id === preferredVoiceId;
         responsiveVoice.speak(text, responsiveVoices[0].name, {
@@ -134,7 +141,7 @@ speechService.speak = function (textOrOject, options = {}) {
         startedSpeakingRV = true;
         hasSpoken = true;
     } else if (externalVoices.length > 0) {
-        speechServiceExternal.speak(text, externalVoices[0].ref.providerId, externalVoices[0]);
+        speechServiceExternal.speak(ipa || text, externalVoices[0].ref.providerId, externalVoices[0], { ipa: !!ipa });
     }
     testIsSpeaking();
     setTimeout(() => {
@@ -165,14 +172,14 @@ speechService.speakAfterFinished = function (txtOrObject, options) {
             speechService.speak(_waitingSpeakOptions.txtOrObject, _waitingSpeakOptions.options);
             _waitingSpeakOptions.waiting = false;
             speechService.resetSpeakAfterFinished();
-        })
+        });
     }
-}
+};
 
 speechService.resetSpeakAfterFinished = function () {
     _waitingSpeakOptions.txtOrObject = '';
     _waitingSpeakOptions.options = undefined;
-}
+};
 
 /**
  * speaks an array of speak-elements one after each other
@@ -198,7 +205,7 @@ speechService.speakArray = async function (array, progressFn, index) {
     currentSpeakArray = JSON.parse(JSON.stringify(array));
     let object = currentSpeakArray.shift();
     if (object.text) {
-        speechService.speak(object.text, { dontStop: true });
+        speechService.speak(object.text, { dontStop: true, ipa: object.ipa });
         await speechService.waitForFinishedSpeaking();
     } else if (object.base64Sound) {
         await audioUtil.playAudio(object.base64Sound);
@@ -257,7 +264,7 @@ speechService.waitForFinishedSpeaking = async function () {
     await promise;
 };
 
-speechService.testSpeak = function(voiceId, testSentence, testLang) {
+speechService.testSpeak = function (voiceId, testSentence, testLang) {
     if (!voiceId) {
         return;
     }
@@ -274,7 +281,7 @@ speechService.testSpeak = function(voiceId, testSentence, testLang) {
  * returns array of languages codes where a TTS voice exists
  * @return {*} array of languages where one element has properties [en, de, code].
  */
-speechService.getVoicesLangs = function() {
+speechService.getVoicesLangs = function () {
     let voiceLangCodesFull = allVoices.map((voice) => voice.langFull);
     let allVoiceLangCodes = voiceLangCodesFull.concat(allVoices.map((voice) => voice.lang));
     return i18nService.getAllLanguages().filter((lang) => allVoiceLangCodes.indexOf(lang.code) !== -1);
@@ -292,7 +299,7 @@ speechService.getVoices = function () {
 speechService.getVoicesInitialized = async function () {
     await initPromise;
     return speechService.getVoices();
-}
+};
 
 speechService.voiceSortFn = function (a, b) {
     if (a.lang !== b.lang) {
@@ -336,10 +343,10 @@ speechService.nativeSpeechSupported = function () {
     );
 };
 
-speechService.getVoiceLang = function(voiceId) {
+speechService.getVoiceLang = function (voiceId) {
     let voices = getVoicesById(voiceId);
     return voices && voices[0] ? voices[0].langFull : null;
-}
+};
 
 speechService.getPreferredVoiceLang = function () {
     return speechService.getVoiceLang(_preferredVoiceId);
@@ -358,16 +365,19 @@ speechService.isVoiceLangLinkedToTextLang = function () {
 
 speechService.hasSpoken = function () {
     return hasSpoken;
-}
+};
 
 speechService.getExternalVoice = function (voiceId) {
     if (!voiceId) {
         return false;
     }
     let voices = getVoicesById(voiceId) || [];
-    let externalVoices = voices.filter((voice) => voice.type === constants.VOICE_TYPE_EXTERNAL_PLAYING || voice.type === constants.VOICE_TYPE_EXTERNAL_DATA);
+    let externalVoices = voices.filter(
+        (voice) =>
+            voice.type === constants.VOICE_TYPE_EXTERNAL_PLAYING || voice.type === constants.VOICE_TYPE_EXTERNAL_DATA
+    );
     return externalVoices[0];
-}
+};
 
 /**
  * reloads all voices
@@ -436,7 +446,14 @@ async function init() {
             registerVoices(window.speechSynthesis.getVoices());
         };
     }
-    addVoice(constants.VOICE_DEVICE_DEFAULT, await i18nService.tLoad("defaultDeviceVoice"), i18nService.getBrowserLang(), constants.VOICE_TYPE_NATIVE, true, undefined);
+    addVoice(
+        constants.VOICE_DEVICE_DEFAULT,
+        await i18nService.tLoad('defaultDeviceVoice'),
+        i18nService.getBrowserLang(),
+        constants.VOICE_TYPE_NATIVE,
+        true,
+        undefined
+    );
     responsiveVoiceVoices.forEach((voice) => {
         addVoice(voice.name, voice.name, voice.lang, constants.VOICE_TYPE_RESPONSIVEVOICE, false, voice);
     });
