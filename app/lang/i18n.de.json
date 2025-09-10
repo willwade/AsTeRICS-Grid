@@ -1249,6 +1249,7 @@
   "vocabularyLevel": "Vokabular-Level",
   "shownVocabularyLevel": "Angezeigtes Vokabular-Level",
   "progressiveLanguage": "Mitwachsende Sprache",
+  "grammar": "Grammatik",
   "untilLevel": "bis Level {level}",
   "keyboard": "Tastatur",
   "keyboardMode": "Tastatur-Modus",

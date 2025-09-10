@@ -91,6 +91,15 @@
                 </div>
             </div>
         </div>
+        <div class="srow">
+            <div class="eleven columns">
+                <h3 class="mt-2">{{ $t('grammar') }}</h3>
+                <div class="srow">
+                    <input id="enforceWordFormTagOrder" type="checkbox" v-model="metadata.wordFormTagOrderMatters" @change="saveMetadata(metadata)"/>
+                    <label for="enforceWordFormTagOrder">{{ $t('wordFormTagOrderMatters') }}</label>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 

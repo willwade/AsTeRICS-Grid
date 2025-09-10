@@ -1,10 +1,10 @@
 import $ from '../externals/jquery.js';
 import { i18nService } from './i18nService.js';
-import {GridElement} from "../model/GridElement.js";
-import {constants} from "../util/constants.js";
-import {util} from "../util/util.js";
-import {dataService} from "./data/dataService.js";
-import {GridActionWordForm} from "../model/GridActionWordForm.js";
+import { GridElement } from '../model/GridElement.js';
+import { constants } from '../util/constants.js';
+import { util } from '../util/util.js';
+import { dataService } from './data/dataService.js';
+import { GridActionWordForm } from '../model/GridActionWordForm.js';
 
 let stateService = {};
 let _states = {};
@@ -15,6 +15,7 @@ let _currentWordFormTags = [];
 let _currentWordFormIds = {}; //elementId -> id of word form list (for current lang!)
 let _currentWordFormTagsOfElements = {}; //elementId -> list of tags for currently shown wordForm
 let _convertMode = null;
+let _wordFormTagOrderMatters = false;
 
 stateService.setCurrentGrid = function (gridData) {
     _currentGrid = gridData;
@@ -60,7 +61,7 @@ stateService.resetWordForms = function () {
 
 stateService.resetWordFormTags = function () {
     _currentWordFormTags = [];
-}
+};
 
 stateService.resetWordFormIds = function (currentElement) {
     let keep = null;
@@ -98,7 +99,7 @@ stateService.getCurrentWordFormTags = function () {
 stateService.getWordForm = function (element, options) {
     let object = stateService.getWordFormObject(element, options);
     return object ? object.value : null;
-}
+};
 
 /**
  * returns a wordFormObject for the given options
@@ -123,9 +124,19 @@ stateService.getWordFormObject = function (element, options) {
     }
     while (options.searchTags.length > 0) {
         for (let form of langForms) {
-            if (options.searchTags.every((tag) => form.tags.includes(tag))) {
-                _currentWordFormTagsOfElements[element.id] = options.searchTags;
-                return form;
+            if (_wordFormTagOrderMatters) {
+                if (
+                    form.tags.length >= options.searchTags.length &&
+                    options.searchTags.every((tag, idx) => form.tags[idx] === tag)
+                ) {
+                    _currentWordFormTagsOfElements[element.id] = options.searchTags;
+                    return form;
+                }
+            } else {
+                if (options.searchTags.every((tag) => form.tags.includes(tag))) {
+                    _currentWordFormTagsOfElements[element.id] = options.searchTags;
+                    return form;
+                }
             }
         }
         if (!options.searchSubTags) {
@@ -146,19 +157,21 @@ stateService.getWordFormObject = function (element, options) {
  * @param lang
  * @returns {T[]}
  */
-stateService.getWordFormsForLang = function(element, lang = '') {
+stateService.getWordFormsForLang = function (element, lang = '') {
     lang = lang || i18nService.getContentLang();
     let formsLang = element.wordForms.filter((form) => !form.lang || form.lang === lang);
-    let formsBaseLang = element.wordForms.filter((form) => !form.lang || i18nService.getBaseLang(form.lang) === i18nService.getBaseLang(lang));
+    let formsBaseLang = element.wordForms.filter(
+        (form) => !form.lang || i18nService.getBaseLang(form.lang) === i18nService.getBaseLang(lang)
+    );
     return formsLang.length > 0 ? formsLang : formsBaseLang;
 };
 
-stateService.getFirstForm = function(element, lang = null) {
+stateService.getFirstForm = function (element, lang = null) {
     let object = stateService.getFirstFormObject(element, lang);
     return object ? object.value : null;
 };
 
-stateService.getFirstFormObject = function(element, lang) {
+stateService.getFirstFormObject = function (element, lang) {
     let forms = stateService.getWordFormsForLang(element, lang);
     return forms.length > 0 ? forms[0] : null;
 };
@@ -168,7 +181,11 @@ stateService.getDisplayText = function (elementId) {
     if (!element) {
         return '';
     }
-    return stateService.getWordForm(element, {searchTags: _currentWordFormTags, searchSubTags: true}) || stateService.getFirstForm(element) || i18nService.getTranslation(element.label);
+    return (
+        stateService.getWordForm(element, { searchTags: _currentWordFormTags, searchSubTags: true }) ||
+        stateService.getFirstForm(element) ||
+        i18nService.getTranslation(element.label)
+    );
 };
 
 /**
@@ -194,7 +211,7 @@ stateService.getSpeakText = function (elementOrId, options) {
         baseForm.pronunciation ||
         baseForm.value ||
         element.pronunciation[options.lang] ||
-        i18nService.getTranslation(element.label, {lang: options.lang}) ||
+        i18nService.getTranslation(element.label, { lang: options.lang }) ||
         i18nService.getTranslation(element.label)
     );
 };
@@ -206,7 +223,7 @@ stateService.getSpeakTextAllLangs = function (elementId) {
         return '';
     }
     let possibleLangs = element.wordForms.map((e) => e.lang);
-    possibleLangs = possibleLangs.concat(Object.keys(element.label)).concat(Object.keys(element.pronunciation))
+    possibleLangs = possibleLangs.concat(Object.keys(element.label)).concat(Object.keys(element.pronunciation));
     possibleLangs = util.deduplicateArray(possibleLangs);
     for (let lang of possibleLangs) {
         langWordFormMap[lang] = stateService.getSpeakText(element, { lang: lang });
@@ -231,11 +248,16 @@ stateService.nextWordForm = function (elementId) {
     if (currentLangForms.length === 0) {
         return;
     }
-    let currentWordFormObject = this.getWordFormObject(element, { searchTags: _currentWordFormTags, searchSubTags: true });
+    let currentWordFormObject = this.getWordFormObject(element, {
+        searchTags: _currentWordFormTags,
+        searchSubTags: true
+    });
 
     // limit to all indexes that match current tags
-    let currentTags = _currentWordFormTagsOfElements[element.id] || []
-    possibleIndexes = possibleIndexes.filter(index => currentTags.every((tag) => currentLangForms[index].tags.includes(tag)));
+    let currentTags = _currentWordFormTagsOfElements[element.id] || [];
+    possibleIndexes = possibleIndexes.filter((index) =>
+        currentTags.every((tag) => currentLangForms[index].tags.includes(tag))
+    );
 
     // get id of current word form object
     let currentObjectIndex = currentLangForms.indexOf(currentWordFormObject);
@@ -316,13 +338,10 @@ function getElement(id) {
         return null;
     }
     let globalGridElements = _currentGlobalGrid ? _currentGlobalGrid.gridElements : [];
-    return (
-        _currentGrid.gridElements.filter((e) => e.id === id)[0] ||
-        globalGridElements.filter((e) => e.id === id)[0]
-    );
+    return _currentGrid.gridElements.filter((e) => e.id === id)[0] || globalGridElements.filter((e) => e.id === id)[0];
 }
 
-function setTextInUI (elementId, text) {
+function setTextInUI(elementId, text) {
     text = util.convertLowerUppercase(text, _convertMode);
     $(document).trigger(constants.EVENT_ELEM_TEXT_CHANGED, [elementId, text]);
 }
@@ -330,13 +349,14 @@ function setTextInUI (elementId, text) {
 async function getMetadataConfig() {
     let metadata = await dataService.getMetadata();
     _convertMode = metadata.textConfig.convertMode;
+    _wordFormTagOrderMatters = !!metadata.wordFormTagOrderMatters;
 }
 
 function getActionsOfType(elem, type) {
     if (!elem) {
         return [];
     }
-    return elem.actions.filter(action => action.modelName === type);
+    return elem.actions.filter((action) => action.modelName === type);
 }
 
 function hasNextWordFormAction(elem) {
