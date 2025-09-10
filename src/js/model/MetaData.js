@@ -25,6 +25,7 @@ class MetaData extends Model({
     textConfig: [TextConfig],
     notificationConfig: [NotificationConfig],
     activateARASAACGrammarAPI: [Boolean],
+    wordFormTagOrderMatters: [Boolean],
     vocabularyLevel: [Number, null],
     integrations: [Object] // IntegrationConfigSync
 }) {
@@ -67,7 +68,11 @@ class MetaData extends Model({
 
     static getElementColor(gridElement = {}, metadata, fallbackColor) {
         metadata = metadata || new MetaData();
-        let defaultColor = gridElement.backgroundColor || fallbackColor || metadata.colorConfig.elementBackgroundColor || constants.DEFAULT_ELEMENT_BACKGROUND_COLOR;
+        let defaultColor =
+            gridElement.backgroundColor ||
+            fallbackColor ||
+            metadata.colorConfig.elementBackgroundColor ||
+            constants.DEFAULT_ELEMENT_BACKGROUND_COLOR;
         let colorScheme = MetaData.getUseColorScheme(metadata);
         if (!colorScheme) {
             return defaultColor;
@@ -99,6 +104,7 @@ MetaData.defaults({
     inputConfig: new InputConfig(),
     globalGridActive: false,
     globalGridHeightPercentage: 17,
+    wordFormTagOrderMatters: false,
     vocabularyLevel: null,
     integrations: new IntegrationConfigSync()
 });
