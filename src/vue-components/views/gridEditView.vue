@@ -30,6 +30,9 @@
             <add-multiple-modal v-if="showMultipleModal" v-bind:grid-data="gridData" :undo-service="undoService" @reload="reload" @close="showMultipleModal = false"/>
         </div>
         <div>
+            <keyboard-generator-modal v-if="showKeyboardGeneratorModal" :grid-data="gridData" :undo-service="undoService" @reload="reload" @close="showKeyboardGeneratorModal = false"/>
+        </div>
+        <div>
             <grid-settings-modal v-if="showGridSettingsModal" :grid-data-param="gridData" :is-global-grid="metadata.globalGridId === gridData.id" @reload="reload" @close="showGridSettingsModal = false;" :undo-service="undoService"/>
         </div>
         <div>
@@ -60,6 +63,7 @@
 
     import EditElement from '../modals/editElement.vue'
     import AddMultipleModal from '../modals/addMultipleModal.vue'
+    import KeyboardGeneratorModal from '../modals/keyboardGeneratorModal.vue'
     import {actionService} from "../../js/service/actionService";
     import {GridElement} from "../../js/model/GridElement";
     import {GridData} from "../../js/model/GridData";
@@ -98,6 +102,7 @@
                 undoService: new UndoService(),
                 doingUndoRedo: false,
                 showMultipleModal: false,
+                showKeyboardGeneratorModal: false,
                 showGridSettingsModal: false,
                 showNavigateModal: false,
                 showTranslateModal: false,
@@ -123,7 +128,7 @@
             AppGridDisplay,
             SetNavigationModal,
             GridTranslateModal,
-            GridSettingsModal, EditElement, AddMultipleModal, HeaderIcon
+            GridSettingsModal, EditElement, AddMultipleModal, KeyboardGeneratorModal, HeaderIcon
         },
         methods: {
             configPropTransfer(id) {
@@ -334,6 +339,9 @@
             },
             newElements() {
                 this.showMultipleModal = true;
+            },
+            generateKeyboard() {
+                this.showKeyboardGeneratorModal = true;
             },
             clearElements() {
                 if (confirm(i18nService.t('CONFIRM_DELETE_ALL_ELEMS'))) {
@@ -554,7 +562,7 @@
                 this.ctrlKeyHold = false;
             },
             onKeyDown(event) {
-                if (this.showMultipleModal || this.showGridSettingsModal || this.showNavigateModal || this.showTranslateModal || this.showPropTransferModal || this.showEditModal) {
+                if (this.showMultipleModal || this.showKeyboardGeneratorModal || this.showGridSettingsModal || this.showNavigateModal || this.showTranslateModal || this.showPropTransferModal || this.showEditModal) {
                     return;
                 }
                 const ctrlOrMeta = constants.IS_MAC ? event.metaKey : event.ctrlKey;
@@ -745,6 +753,7 @@
         var CONTEXT_NEW_YT_PLAYER = "CONTEXT_NEW_YT_PLAYER";
         var CONTEXT_NEW_LIVE = "CONTEXT_NEW_LIVE";
         var CONTEXT_NEW_MATRIX_CONVERSATION = "CONTEXT_NEW_MATRIX_CONVERSATION";
+        var CONTEXT_GENERATE_KEYBOARD = "CONTEXT_GENERATE_KEYBOARD";
 
         var CONTEXT_LAYOUT_ALL_UP = "CONTEXT_LAYOUT_ALL_UP";
         var CONTEXT_LAYOUT_ALL_RIGHT = "CONTEXT_LAYOUT_ALL_RIGHT";
@@ -767,6 +776,7 @@
             name: i18nService.t('new'), icon: "fas fa-plus-circle", items: {
                 'CONTEXT_NEW_SINGLE': {name: i18nService.t('newElement'), icon: "fas fa-plus"},
                 'CONTEXT_NEW_MASS': {name: i18nService.t('manyNewElements'), icon: "fas fa-clone"},
+                'CONTEXT_GENERATE_KEYBOARD': {name: i18nService.t('generateKeyboard'), icon: "fas fa-keyboard"},
                 'CONTEXT_NEW_COLLECT': {
                     name: i18nService.t('newCollectElement'),
                     icon: "fas fa-ellipsis-h"
@@ -901,6 +911,10 @@
                 }
                 case CONTEXT_NEW_MASS: {
                     vueApp.newElements();
+                    break;
+                }
+                case CONTEXT_GENERATE_KEYBOARD: {
+                    vueApp.generateKeyboard();
                     break;
                 }
                 case CONTEXT_NEW_COLLECT: {
